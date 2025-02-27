@@ -1,0 +1,100 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using AptSmartBackend.Models;
+using AptSmartBackend;
+using AptSmartBackend.Services.Abstract;
+using AptSmartBackend.Services.Concrete;
+using AptSmartBackend.Helpers;
+
+
+var builder = WebApplication.CreateBuilder(args);
+
+
+// Get connection strings
+string authConnectionString = builder.Configuration.GetConnectionString("AuthConnection") ?? throw new KeyNotFoundException("Cannot find Auth Connection string");
+JwtSettings jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>() ?? throw new KeyNotFoundException("Cannot find Jwt Settings");
+
+// Add services to the container
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Add Identity with sql server
+builder.Services.AddDbContext<AuthDbContext>(options =>
+{
+    options.UseSqlServer(authConnectionString);
+});
+
+// Setup Identity
+builder.Services.AddIdentity<AuthUser, IdentityRole>()
+    .AddEntityFrameworkStores<AuthDbContext>()
+    .AddDefaultTokenProviders();
+
+// Setup JWT Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = false; // CHANGE IN PRODUCTIONS
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+        ValidateIssuer = false,     // CHANGE IN PRODUCTIONS
+        ValidateAudience = false,   // CHANGE IN PRODUCTIONS
+        ClockSkew = TimeSpan.Zero 
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            if (context.Request.Cookies.TryGetValue("AuthToken", out string? authToken))
+            {
+                context.Token = authToken;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
+});
+
+// Dependency Injection
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddSingleton<JwtHelper>();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+//app.UseHttpsRedirection();
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();

@@ -1,0 +1,6 @@
+@AptSmartBackend_HostAddress = http://localhost:5063
+
+GET {{AptSmartBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
