@@ -14,23 +14,42 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using AptSmartBackend.Models;
-using AptSmartBackend;
 using AptSmartBackend.Services.Abstract;
 using AptSmartBackend.Services.Concrete;
 using AptSmartBackend.Helpers;
+using AptSmartBackend.SettingsObjects;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-// Get connection strings
+// Get connection strings/secrets
 string authConnectionString = builder.Configuration.GetConnectionString("AuthConnection") ?? throw new KeyNotFoundException("Cannot find Auth Connection string");
 JwtSettings jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>() ?? throw new KeyNotFoundException("Cannot find Jwt Settings");
+// CorsSettings corsSettings = builder.Configuration.GetSection("Cors").Get<CorsSettings>() ?? throw new KeyNotFoundException("Cannot find CORS settings");
 
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+// Configure CORS // CHANGE IN PRODUCTIONS
+//string corsPolicyName = "frontendCorsPolicy";
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy(corsPolicyName, policy =>
+//    {
+//        foreach (string site in corsSettings.AllowedSites)
+//        {
+//            policy.WithOrigins(site)
+//                .AllowAnyHeader()
+//                .AllowAnyMethod()
+//                .AllowCredentials();
+//        }
+//    });
+//});
 
 // Add Identity with sql server
 builder.Services.AddDbContext<AuthDbContext>(options =>
@@ -82,6 +101,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSingleton<JwtHelper>();
 
 var app = builder.Build();
+
+//app.UseCors(corsPolicyName); // CHANGE IN PRODUCTIONS
 
 if (app.Environment.IsDevelopment())
 {

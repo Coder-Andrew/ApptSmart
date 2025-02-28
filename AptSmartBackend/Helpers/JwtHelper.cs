@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using AptSmartBackend.SettingsObjects;
 
 namespace AptSmartBackend.Helpers
 {
@@ -39,6 +40,9 @@ namespace AptSmartBackend.Helpers
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(_jwtExpiryMinutes),
                 signingCredentials: credentials
+                // issuer: _jwtSetting.Issuer       // CHANGE IN PRODUCTIONS
+                // audience: _jwtSetting.Audience   // CHANGE IN PRODUCTIONS
+
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);

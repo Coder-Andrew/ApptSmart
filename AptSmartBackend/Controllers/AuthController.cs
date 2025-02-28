@@ -1,13 +1,15 @@
 ﻿using AptSmartBackend.DTOs;
 using AptSmartBackend.Services;
 using AptSmartBackend.Services.Abstract;
+using AptSmartBackend.SettingsObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace AptSmartBackend.Controllers
 {
     [ApiController]
-    [Route("auth")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly JwtSettings _jwtSettings;
@@ -48,7 +50,7 @@ namespace AptSmartBackend.Controllers
             CookieOptions cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = false, // CHANGE IN PRODUCTION 
+                Secure = true, // CHANGE IN PRODUCTION 
                 SameSite = SameSiteMode.None, // CHANGE IN PRODUCTIONS
                 Expires = DateTime.Now.AddMinutes(_jwtSettings.ExpiryMinutes)
             };
@@ -72,7 +74,22 @@ namespace AptSmartBackend.Controllers
         {
             var claims = string.Join(", ", User.Claims.Select(c => c.ToString()));
 
-            return Ok("User is authenticated: " + claims);
+            return Ok(new { success= true, data=claims });
+        }
+
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> Me()
+        {
+            string emailClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)!.Value;
+            string idClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value;
+
+            if (emailClaim == null)
+            {
+                return NotFound("Email not found");
+            }
+
+            return Ok(new { email=emailClaim, id=idClaim });
         }
     }
 }

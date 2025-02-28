@@ -1,4 +1,4 @@
-﻿namespace AptSmartBackend
+﻿namespace AptSmartBackend.SettingsObjects
 {
     public class JwtSettings
     {
@@ -9,4 +9,5 @@
         //public string RefreshTokenSecret { get; set; }
         //public int RefreshTokenExpiryDays { get; set; }
     }
+
 }

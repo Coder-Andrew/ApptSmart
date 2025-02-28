@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,dotnetcore,nextjs,node
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,dotnetcore,nextjs,node
 
+.vs/
+.vscode/
+
 ### DotnetCore ###
 # .NET Core build folders
 bin/
