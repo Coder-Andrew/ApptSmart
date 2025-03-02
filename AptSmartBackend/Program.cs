@@ -18,6 +18,7 @@ using AptSmartBackend.Services.Abstract;
 using AptSmartBackend.Services.Concrete;
 using AptSmartBackend.Helpers;
 using AptSmartBackend.SettingsObjects;
+using AptSmartBackend.Utilities;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -101,6 +102,13 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSingleton<JwtHelper>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var userManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    await IdentitySeeder.SeedRolesAsync(userManager);
+}
 
 //app.UseCors(corsPolicyName); // CHANGE IN PRODUCTIONS
 

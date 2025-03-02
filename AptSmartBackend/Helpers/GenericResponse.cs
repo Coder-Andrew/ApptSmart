@@ -9,6 +9,7 @@
         InvalidCredentials,
         SuccessfulLogin,
         UserCreated,
+        FailedToAddRole,
     }
     public class GenericResponse<T>
     {

@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 interface User {
     id: string,
     email: string,
-    role: Array<string>
+    roles: Array<string>
 };
 
 interface UserContextType {
@@ -13,15 +13,18 @@ interface UserContextType {
     refreshUser: () => Promise<void>;
     logout: () => Promise<void>;
     login: (email: string, password: string) => Promise<void>;
+    authReady: boolean,
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children } : { children: React.ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [ user, setUser ] = useState<User | null>(null);
+    const [ authReady, setAuthReady ] = useState<boolean>(false);
 
     const fetchUser = async () => {
         try {
+            setAuthReady(false);
             const response = await fetch("/api/auth/me",{
                 method: "GET",
                 credentials: "include"
@@ -29,17 +32,15 @@ export const UserProvider = ({ children } : { children: React.ReactNode }) => {
 
             if (!response.ok) {
                 setUser(null);
-                return;
+            } else {
+                const jsonResponse = await response.json();
+                setUser(jsonResponse);
             }
-
-            const jsonResponse = await response.json();
-
-            console.log(jsonResponse);
-
-            setUser(jsonResponse);
         } catch (err) {
             console.log(err);
             setUser(null);
+        } finally {
+            setAuthReady(true);
         }
     };
 
@@ -76,7 +77,7 @@ export const UserProvider = ({ children } : { children: React.ReactNode }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, refreshUser: fetchUser, logout, login }}>
+        <UserContext.Provider value={{ user, refreshUser: fetchUser, logout, login, authReady }}>
             { children }
         </UserContext.Provider>
     );

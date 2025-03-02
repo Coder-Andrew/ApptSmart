@@ -4,20 +4,28 @@ import Link from "next/link";
 
 
 const NavBar = () => {
-    const user = useUser();
+    const { user, logout, authReady } = useUser();
     
+    console.log(user);
+
     return ( 
         <nav>
-            {user.user ? 
-            <div>
-                <span>Welcome, {user.user.email}</span>
-                <span onClick={user.logout}>Logout</span>
-            </div> :
-            <div>
-                <span><Link href={"/user/login"}>Login</Link></span>
-                /
-                <span><Link href={"/user/register"}>Register</Link></span>
-            </div>}
+            { authReady &&
+                <div>
+                    {user ? (
+                        <>
+                            <span>Welcome, {user.email}</span>
+                            <span onClick={logout}>Logout</span>                        
+                            { user.roles.includes("User") && <span>User can see this</span>}
+                        </>
+                    ) : (
+                        <>
+                            <span><Link href={"/user/login"}>Login</Link></span>/
+                            <span><Link href={"/user/register"}>Register</Link></span>
+                        </>
+                    )}
+                </div>
+            }
             <hr />
         </nav>
     );

@@ -3,6 +3,7 @@ using AptSmartBackend.Models;
 using AptSmartBackend.Helpers;
 using AptSmartBackend.Services.Abstract;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace AptSmartBackend.Services.Concrete
 {
@@ -14,6 +15,44 @@ namespace AptSmartBackend.Services.Concrete
         {
             _userManager = userManager;
             _jwtHelper = jwtHelper;
+        }
+
+        public GenericResponse<UserInfoDto> GetUserInfo(ClaimsPrincipal user)
+        {
+            // TODO: Find out a better way to pass message around
+            string? emailClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            string? idClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            string[] roles = user.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value.ToString()).ToArray();
+
+            string[] missingClaims = new List<string>
+            {
+                string.IsNullOrEmpty(emailClaim) ? "Email" : null,
+                string.IsNullOrEmpty(idClaim) ? "Id" : null
+            }.Where(s => s != null).ToArray();
+
+            if (missingClaims.Any())
+            {
+                return new GenericResponse<UserInfoDto>
+                (
+                    data: null,
+                    success: false,
+                    message: $"Missing claims: {string.Join(", ", missingClaims)}",
+                    statusCode: GenericStatusCode.Failure
+                );
+            }            
+
+            return new GenericResponse<UserInfoDto>
+            (
+                data: new UserInfoDto
+                {
+                    Email = emailClaim!,
+                    Id = idClaim!,
+                    Roles = roles
+                },
+                success: true,
+                message: "Successfully retrieved user info",
+                statusCode: GenericStatusCode.Success
+            );
         }
 
         public async Task<GenericResponse<string>> Login(LoginDto loginInfo)
@@ -74,6 +113,19 @@ namespace AptSmartBackend.Services.Concrete
                     success: false,
                     message: "User creation failed",
                     statusCode: GenericStatusCode.FailedToCreateUser
+                );
+            }
+
+            // TODO: potentially move role handling off into its own method
+            IdentityResult roleResult = await _userManager.AddToRoleAsync(user, "user");
+
+            if (!roleResult.Succeeded)
+            {
+                return new GenericResponse<string>(
+                    data: null,
+                    success: false,
+                    message: "Failed to add role to user",
+                    statusCode: GenericStatusCode.FailedToAddRole
                 );
             }
 

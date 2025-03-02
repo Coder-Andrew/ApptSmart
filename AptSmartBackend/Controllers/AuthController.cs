@@ -81,15 +81,16 @@ namespace AptSmartBackend.Controllers
         [Authorize]
         public async Task<IActionResult> Me()
         {
-            string emailClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)!.Value;
-            string idClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value;
+            GenericResponse<UserInfoDto> res = _authService.GetUserInfo(User);
 
-            if (emailClaim == null)
+            if (!res.Success)
             {
-                return NotFound("Email not found");
+                return NotFound(new { success = false, message = res.Message });
             }
 
-            return Ok(new { email=emailClaim, id=idClaim });
+            UserInfoDto userInfo = res.Data!;
+
+            return Ok(userInfo);
         }
     }
 }
