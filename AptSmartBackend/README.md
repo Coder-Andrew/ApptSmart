@@ -1,0 +1,2 @@
+### Useful Commands
+`dotnet ef dbcontext scaffold Name=AppConnection Microsoft.EntityFrameworkCore.SqlServer -o Models/AppModels --context AppDbContext --context-dir Models --use-database-names --force`

@@ -1,0 +1,31 @@
+CREATE TABLE [UserInfo] (
+	[Id] UNIQUEIDENTIFIER DEFAULT NEWSEQUENTIALID() PRIMARY KEY,
+	[AspNetIdentityId] NVARCHAR(450) NOT NULL,
+);
+
+CREATE TABLE [UserAppointments] (
+	[Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	[UserInfoId] UNIQUEIDENTIFIER NOT NULL,
+	[Time] DATETIME NOT NULL,
+	[Date] DATE NOT NULL
+);
+
+CREATE TABLE [AvailableAppointments] (
+	[Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	[Time] DATETIME NOT NULL,
+	[Date] DATE NOT NULL,
+);
+
+--CREATE TABLE [AppointmentSettings] (
+--	[Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+--	[AppointmentStartTime] DATETIME NOT NULL,
+--	[AppointmentEndTime] DATETIME NOT NULL,
+
+--);
+
+ALTER TABLE [UserAppointments] 
+ADD CONSTRAINT [Fk UserAppointments UserInfoId]
+FOREIGN KEY ([UserInfoId])
+REFERENCES [UserInfo] ([Id])
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;

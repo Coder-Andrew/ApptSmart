@@ -4,6 +4,8 @@ using AptSmartBackend.Helpers;
 using AptSmartBackend.Services.Abstract;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using AptSmartBackend.DAL.Abstract;
+using AptSmartBackend.Models.AppModels;
 
 namespace AptSmartBackend.Services.Concrete
 {
@@ -11,10 +13,13 @@ namespace AptSmartBackend.Services.Concrete
     {
         private readonly UserManager<AuthUser> _userManager;
         private readonly JwtHelper _jwtHelper;
-        public AuthService(UserManager<AuthUser> userManager, JwtHelper jwtHelper)
+        private readonly IAppUserRepository _appUserRepository;
+        // TODO: Add logging
+        public AuthService(UserManager<AuthUser> userManager, IAppUserRepository appUserRepo, JwtHelper jwtHelper)
         {
             _userManager = userManager;
             _jwtHelper = jwtHelper;
+            _appUserRepository = appUserRepo;
         }
 
         public GenericResponse<UserInfoDto> GetUserInfo(ClaimsPrincipal user)
@@ -84,6 +89,7 @@ namespace AptSmartBackend.Services.Concrete
             throw new NotImplementedException();
         }
 
+        // TODO: Handle errors better and add transaction scoping
         public async Task<GenericResponse<string>> Register(RegisterDto registerInfo)
         {
             if (await _userManager.FindByEmailAsync(registerInfo.Email) != null)
@@ -105,6 +111,7 @@ namespace AptSmartBackend.Services.Concrete
             };
 
             IdentityResult result = await _userManager.CreateAsync(user, registerInfo.Password);
+            
 
             if (!result.Succeeded)
             {
@@ -128,6 +135,12 @@ namespace AptSmartBackend.Services.Concrete
                     statusCode: GenericStatusCode.FailedToAddRole
                 );
             }
+
+            // TODO: Handle errors when commiting to changes to this db fails
+            _appUserRepository.AddOrUpdate(new UserInfo
+            {
+                AspNetIdentityId = user.Id
+            });
 
             return new GenericResponse<string>(
                 data: user.Id,

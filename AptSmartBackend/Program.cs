@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -19,13 +20,18 @@ using AptSmartBackend.Services.Concrete;
 using AptSmartBackend.Helpers;
 using AptSmartBackend.SettingsObjects;
 using AptSmartBackend.Utilities;
+using AptSmartBackend.DAL.Abstract;
+using AptSmartBackend.DAL.Concrete;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddUserSecrets<Program>();
+
 
 // Get connection strings/secrets
 string authConnectionString = builder.Configuration.GetConnectionString("AuthConnection") ?? throw new KeyNotFoundException("Cannot find Auth Connection string");
+string appConnectionString = builder.Configuration.GetConnectionString("AppConnection") ?? throw new KeyNotFoundException("Cannot find App Connection string");
 JwtSettings jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>() ?? throw new KeyNotFoundException("Cannot find Jwt Settings");
 // CorsSettings corsSettings = builder.Configuration.GetSection("Cors").Get<CorsSettings>() ?? throw new KeyNotFoundException("Cannot find CORS settings");
 
@@ -54,9 +60,11 @@ builder.Services.AddSwaggerGen();
 
 // Add Identity with sql server
 builder.Services.AddDbContext<AuthDbContext>(options =>
-{
-    options.UseSqlServer(authConnectionString);
-});
+    options.UseSqlServer(authConnectionString));
+
+// Setup appdbcontext/app connection
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(appConnectionString));
 
 // Setup Identity
 builder.Services.AddIdentity<AuthUser, IdentityRole>()
@@ -98,6 +106,9 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Dependency Injection
+builder.Services.AddScoped<DbContext, AppDbContext>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSingleton<JwtHelper>();
 

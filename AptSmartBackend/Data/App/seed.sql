@@ -1,0 +1,2 @@
+--INSERT INTO [AvailableAppointments] ([Date],[Time]) VALUES
+--	(DATEADD(
