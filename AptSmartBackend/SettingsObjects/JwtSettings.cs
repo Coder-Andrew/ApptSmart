@@ -1,8 +1,13 @@
-﻿namespace AptSmartBackend.SettingsObjects
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AptSmartBackend.SettingsObjects
 {
     public class JwtSettings
     {
-        public string Secret { get; set; }
+        [Required]
+        [MinLength(50)]
+        public string Secret { get; set; } = string.Empty;
+        [Required]
         public int ExpiryMinutes { get; set; }
         //public string Issuer { get; set; }
         //public string Audience { get; set; }

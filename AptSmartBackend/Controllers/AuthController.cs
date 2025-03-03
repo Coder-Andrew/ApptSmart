@@ -4,6 +4,7 @@ using AptSmartBackend.Services.Abstract;
 using AptSmartBackend.SettingsObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Security.Claims;
 
 namespace AptSmartBackend.Controllers
@@ -14,9 +15,9 @@ namespace AptSmartBackend.Controllers
     {
         private readonly JwtSettings _jwtSettings;
         private readonly IAuthService _authService;
-        public AuthController(IConfiguration configuration, IAuthService authService)
+        public AuthController(IOptions<JwtSettings> options, IAuthService authService)
         {
-            _jwtSettings = configuration.GetSection("Jwt").Get<JwtSettings>() ?? throw new KeyNotFoundException("Missing jwt settings");
+            _jwtSettings = options.Value;
             _authService = authService;
         }
 

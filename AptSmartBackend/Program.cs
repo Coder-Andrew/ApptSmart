@@ -32,7 +32,16 @@ builder.Configuration.AddUserSecrets<Program>();
 // Get connection strings/secrets
 string authConnectionString = builder.Configuration.GetConnectionString("AuthConnection") ?? throw new KeyNotFoundException("Cannot find Auth Connection string");
 string appConnectionString = builder.Configuration.GetConnectionString("AppConnection") ?? throw new KeyNotFoundException("Cannot find App Connection string");
-JwtSettings jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>() ?? throw new KeyNotFoundException("Cannot find Jwt Settings");
+
+IConfiguration jwtConfig = builder.Configuration.GetSection("Jwt");
+builder.Services
+    .AddOptions<JwtSettings>()
+    .Bind(jwtConfig)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+string jwtSecret = jwtConfig["Secret"] ?? throw new KeyNotFoundException("Cannot find JWT Secret");
+
 // CorsSettings corsSettings = builder.Configuration.GetSection("Cors").Get<CorsSettings>() ?? throw new KeyNotFoundException("Cannot find CORS settings");
 
 // Add services to the container
@@ -85,7 +94,7 @@ builder.Services.AddAuthentication(options =>
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
         ValidateIssuer = false,     // CHANGE IN PRODUCTIONS
         ValidateAudience = false,   // CHANGE IN PRODUCTIONS
         ClockSkew = TimeSpan.Zero 
