@@ -117,7 +117,8 @@ builder.Services.AddAuthentication(options =>
 // Dependency Injection
 builder.Services.AddScoped<DbContext, AppDbContext>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
+builder.Services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
+builder.Services.AddScoped<IAppUserRepositoryAsync, AppUserRepositoryAsync>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSingleton<JwtHelper>();
 

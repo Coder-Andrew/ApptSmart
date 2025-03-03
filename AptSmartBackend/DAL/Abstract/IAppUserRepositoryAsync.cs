@@ -2,7 +2,7 @@
 
 namespace AptSmartBackend.DAL.Abstract
 {
-    public interface IAppUserRepository : IRepository<UserInfo>
+    public interface IAppUserRepositoryAsync : IRepositoryAsync<UserInfo>
     {
     }
 }

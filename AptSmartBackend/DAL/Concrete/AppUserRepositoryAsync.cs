@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AptSmartBackend.DAL.Concrete
 {
-    public class AppUserRepository : Repository<UserInfo>, IAppUserRepository
+    public class AppUserRepositoryAsync : RepositoryAsync<UserInfo>, IAppUserRepositoryAsync
     {
         private readonly DbSet<UserInfo> _users;
-        public AppUserRepository(AppDbContext ctx) : base(ctx)
+        public AppUserRepositoryAsync(AppDbContext ctx) : base(ctx)
         {
             _users = ctx.UserInfos;
         }

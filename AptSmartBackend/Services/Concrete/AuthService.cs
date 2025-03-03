@@ -13,9 +13,9 @@ namespace AptSmartBackend.Services.Concrete
     {
         private readonly UserManager<AuthUser> _userManager;
         private readonly JwtHelper _jwtHelper;
-        private readonly IAppUserRepository _appUserRepository;
+        private readonly IAppUserRepositoryAsync _appUserRepository;
         // TODO: Add logging
-        public AuthService(UserManager<AuthUser> userManager, IAppUserRepository appUserRepo, JwtHelper jwtHelper)
+        public AuthService(UserManager<AuthUser> userManager, IAppUserRepositoryAsync appUserRepo, JwtHelper jwtHelper)
         {
             _userManager = userManager;
             _jwtHelper = jwtHelper;
@@ -137,7 +137,7 @@ namespace AptSmartBackend.Services.Concrete
             }
 
             // TODO: Handle errors when commiting to changes to this db fails
-            _appUserRepository.AddOrUpdate(new UserInfo
+            await _appUserRepository.AddOrUpdateAsync(new UserInfo
             {
                 AspNetIdentityId = user.Id
             });
