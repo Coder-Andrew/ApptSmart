@@ -1,0 +1,6 @@
+@ApptSmartBackend_HostAddress = http://localhost:5063
+
+GET {{ApptSmartBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
