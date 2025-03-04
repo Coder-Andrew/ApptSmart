@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Jockey+One&family=Khula:wght@300;400;600;700;800&display=swap');
 
 .navbar {
-    position: sticky;
+    /* position: sticky; */
     top: 2%;
     border-radius: 30px;
     background-color: #f0f0f0;
@@ -13,35 +13,38 @@
 }
 
 /* Logo Section */
+.logo {
+    margin-left: 1.5em;
+}
+
 .logo a {
     font-family: 'Jockey One', sans-serif;
-    font-size: 64px;
-    padding-left: 2%;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-size: 4em;
 }
 
-.logo ~ div a {
-    font-size: 28px;
-    font-family: 'Khula', sans-serif;
-}
-
-.logo span:nth-of-type(1) {
+.logoText {
     color: #625F5F;
 }
-.logo span:nth-of-type(2){
+.logoHighlight{
     color: #3498DB;
 }
-
-
-.navbar a {
-    text-decoration: none;
-    /* font-size: 28px; */
+.logoIcon {
+    font-size: 1.2rem;
 }
 
-
+/* Nav Link */
+.navLinks {
+    display: flex;
+    gap: 20px;
+}
 
 .navLinks a {
+    text-decoration: none;
     color: #34495E;
-    padding: 0px 10px;
+    transition: color 0.2s ease-in-out;
 }
 
 .navLinks a:hover {
@@ -49,15 +52,24 @@
     text-decoration: underline;
 }
 
-.userGroup {
-    text-align: center;
-    padding: 0px 10px;
+.navLinks a, .userGroup a{
+    font-size: 1.5em;
+    font-family: 'Khula', sans-serif;
 }
 
-.userGroup a {
-    border-radius: 25px;
-    padding: 5px;
-    margin: 0px 10px;
+/* User Auth Buttons */
+.userGroup {
+    display: flex;
+    gap: 10px;
+    margin-right: 1.5em;
+}
+
+.login, .register {
+    text-decoration: none;
+    padding: 6px 14px;
+    /* font-size: 0.9rem; */
+    border-radius: 20px;
+    transition: opacity 0.2s ease-in-out;
 }
 
 .login {
@@ -68,6 +80,10 @@
 .register {
     background-color: #3498DB;
     color: white;
+}
+
+.login:hover, .register:hover {
+    opacity: 0.4;
 }
 
 .active {

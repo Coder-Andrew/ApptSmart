@@ -22,9 +22,9 @@ const Navbar = () => {
         <nav className={styles.navbar}>            
             <div className={styles.logo}>
                 <Link href={"/"}>
-                    <span>Appt</span>
-                    <span>Smart</span>
-                    {/* Still need to add calendar icon above apptsmart */}
+                    <span className={styles.logoText}>Appt</span>
+                    <span className={styles.logoHighlight}>Smart</span>
+                    <span className={styles.logoIcon}>📅</span>
                 </Link>
             </div>
             <div className={styles.navLinks}>
