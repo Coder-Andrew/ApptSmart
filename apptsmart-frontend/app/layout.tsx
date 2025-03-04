@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import NavBar from "@/components/NavBar";
+import Navbar from "@/components/Navbar/Navbar";
 import { UserProvider } from "@/stores/UserContext";
 
 const geistSans = Geist({
@@ -25,13 +25,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <UserProvider>
-      <NavBar />
-      <html lang="en">
-          <body className={`${geistSans.variable} ${geistMono.variable}`}>
-            {children}
-          </body>
-      </html>
-    </UserProvider>
+    // <UserProvider>
+      <>      
+        <Navbar />
+        <html lang="en">
+            <body className={`${geistSans.variable} ${geistMono.variable}`}>
+              {children}
+            </body>
+        </html>
+      </>
+    /* </UserProvider> */
   );
 }
