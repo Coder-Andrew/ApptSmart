@@ -1,89 +1,184 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
-.modalBackFade {
-    position: fixed;
-    background-color: black;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    opacity: 0.75;
+.modalOverlay * {
+    box-sizing: border-box;
 }
 
-.modalBackground {
+/* Modal overlay - cover entire screen */
+.modalOverlay {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    background-color: #F0F0F0;
-    border-radius: 20px;
-    width: 66vw;
-    height: 66vh;
-    padding: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-    font-family: "Roboto", sans-serif;
-    text-align: left;
-
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
-    flex-direction: row;
-    /* align-items: center; */
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Modal Container */
+.modalContainer {
+    display: flex;
+    width: 800px;
+    max-width: 90%;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Left side of modal */
+.modalLeft {
+    background-color: #f0f0f0;
+    padding: 40px;
+    width: 40%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendarIconSmall {
+    margin-bottom: 20px;
+}
+
+.modalTitle {
+    font-size: 28px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.modalSubTitle {
+    color: #666;
+    margin-top: auto;
+    margin-bottom: 20px;
+}
+
+.calendarIconLarge {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.calendarIconCircle {
+    background-color: #d3d3d3;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+}
+
+/* Right side of modal */
+.modalRight {
+    padding: 40px;
+    width: 60%;
+    position: relative;
+}
+
+.closeButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.formTitle {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.formSubTitle {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.signupForm {
+    display: flex;
+    flex-direction: column;
     gap: 20px;
 }
 
-.modalInfoCard, .modalInputGroup {
-    flex: 1;
-    padding: 50px 20px;
-}
-
-.modalInfoCard {
-    background-color: #DCDCDC;
-    border-radius: inherit;
-}
-
-.modalInputGroup {
+.formGroup {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-}
-
-.secondaryHeader, .formInput label {
-    color: #727272;
-}
-
-.formInput {
-    display: flex;
-    flex-direction: column;
-    /* height: 5vh; */
-}
-
-.formInput input{
-    margin-bottom: 2vh;
-    background-color: inherit;
-    border-radius: 5px;
-    height: 3vh;
-}
-
-.formInput label, .existingAccount {
-    font-size: 0.75rem;
-}
-
-.submitFormBtn {
     width: 100%;
-    height: 3em;
-    background-color: #3498DB;
+}
+
+.formGroup label {
+    color: #666;
+    font-size: 12px;
+}
+
+.formGroup input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.signupButton {
+    background-color: #3498db;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
+    padding: 14px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s;
 }
 
-.existingAccount {
-    margin-top: 50px;
+.signupButton:hover {
+    background-color: #2980b9;
+}
+
+.loginLink {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 20px;
+    color: #666;
 }
 
-.loginBtn {
+.loginLink a {
+    color: #3498db;
     text-decoration: none;
-    color: #3498DB;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .modalContainer {
+        flex-direction: column;
+        width: 95%;
+        max-width: 400px;
+    }
+
+    .formTitle, .formSubTitle {
+        text-align: center;
+    }
+
+    .modalLeft, .modalRight {
+        width: 100%;
+        padding: 30px;
+    }
+
+    .modalLeft {
+        padding-bottom: 20px;
+        text-align: center;
+    }
+
+    .modalRight {
+        padding-top: 20px;
+    }
 }

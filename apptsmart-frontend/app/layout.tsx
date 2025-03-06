@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import { UserProvider } from "@/stores/UserContext";
 import RegisterModal from "@/components/RegisterModal/RegisterModal";
+import { ModalProvider } from "@/providers/ModalProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     // <UserProvider>
-      <>      
+      <ModalProvider> 
         <Navbar />
         <RegisterModal />
         <html lang="en">
@@ -35,7 +36,7 @@ export default function RootLayout({
               {children}
             </body>
         </html>
-      </>
+      </ModalProvider>
     /* </UserProvider> */
   );
 }

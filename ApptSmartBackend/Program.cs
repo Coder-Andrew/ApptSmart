@@ -128,7 +128,7 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var userManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    await IdentitySeeder.SeedRolesAsync(userManager);
+    await ApplicationSeeder.SeedIdentityRolesAsync(userManager);
 }
 
 //app.UseCors(corsPolicyName); // CHANGE IN PRODUCTIONS

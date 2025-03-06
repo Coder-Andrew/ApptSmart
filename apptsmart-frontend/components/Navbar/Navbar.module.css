@@ -10,6 +10,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    /* max-width: 100%; */
+    text-wrap: none;
 }
 
 /* Logo Section */
@@ -66,9 +68,11 @@
 
 .login, .register {
     text-decoration: none;
-    padding: 6px 14px;
+    padding: 10px 20px;
+    font-size: 20px;
     /* font-size: 0.9rem; */
     border-radius: 20px;
+    border: none;
     transition: opacity 0.2s ease-in-out;
 }
 

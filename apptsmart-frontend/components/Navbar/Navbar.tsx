@@ -3,13 +3,15 @@ import { useUser } from "@/stores/UserContext";
 import { usePathname } from "next/navigation";
 import styles from "./Navbar.module.css";
 import Link from "next/link";
+import { useModal } from "@/providers/ModalProvider";
 
 
 const Navbar = () => {
     //const { user, logout, authReady } = useUser();
+    const { openModal } = useModal();
+
     
     const pathname = usePathname();
-    console.log(pathname);
 
     const navLinks = [
         { name: "Home", path: "/" },
@@ -39,8 +41,8 @@ const Navbar = () => {
                 ))}
             </div>
             <div className={styles.userGroup}>
-                <Link className={styles.login} href={"/login"}>Sign In</Link>
-                <Link className={styles.register} href={"/register"}>Sign Up</Link>
+                <button className={styles.login}>Sign In</button>
+                <button className={styles.register} onClick={() => openModal("register")}>Sign Up</button>
             </div>
         </nav>
     )
