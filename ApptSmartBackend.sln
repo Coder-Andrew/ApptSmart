@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApptSmartBackend", "ApptSma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApptSmartBackend_Tests", "ApptSmartBackend_Tests\ApptSmartBackend_Tests.csproj", "{C8E19374-F41F-4014-B9D5-EC5B71B16AA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApptSmartBackend_Scripts", "ApptSmartBackend_Scripts\ApptSmartBackend_Scripts.csproj", "{975D9ECF-B71F-419F-B4B9-0659ACAC7FE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C8E19374-F41F-4014-B9D5-EC5B71B16AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8E19374-F41F-4014-B9D5-EC5B71B16AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8E19374-F41F-4014-B9D5-EC5B71B16AA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{975D9ECF-B71F-419F-B4B9-0659ACAC7FE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{975D9ECF-B71F-419F-B4B9-0659ACAC7FE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{975D9ECF-B71F-419F-B4B9-0659ACAC7FE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{975D9ECF-B71F-419F-B4B9-0659ACAC7FE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

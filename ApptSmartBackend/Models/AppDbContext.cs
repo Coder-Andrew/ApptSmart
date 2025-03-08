@@ -29,16 +29,16 @@ public partial class AppDbContext : DbContext
     {
         modelBuilder.Entity<AvailableAppointment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Availabl__3214EC07F2447C31");
+            entity.HasKey(e => e.Id).HasName("PK__Availabl__3214EC07997CDDE8");
 
-            entity.Property(e => e.Time).HasColumnType("datetime");
+            entity.Property(e => e.DateTime).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<UserAppointment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserAppo__3214EC072D70BA79");
+            entity.HasKey(e => e.Id).HasName("PK__UserAppo__3214EC07D3F5AC86");
 
-            entity.Property(e => e.Time).HasColumnType("datetime");
+            entity.Property(e => e.DateTime).HasColumnType("datetime");
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.UserAppointments)
                 .HasForeignKey(d => d.UserInfoId)
@@ -48,12 +48,14 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<UserInfo>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserInfo__3214EC07A59AD28C");
+            entity.HasKey(e => e.Id).HasName("PK__UserInfo__3214EC07EF791C2D");
 
             entity.ToTable("UserInfo");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newsequentialid())");
             entity.Property(e => e.AspNetIdentityId).HasMaxLength(450);
+            entity.Property(e => e.FirstName).HasMaxLength(150);
+            entity.Property(e => e.LastName).HasMaxLength(150);
         });
 
         OnModelCreatingPartial(modelBuilder);

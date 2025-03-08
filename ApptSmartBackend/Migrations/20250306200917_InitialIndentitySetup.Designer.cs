@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApptSmartBackend.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20250226230603_InitialIdentitySetup")]
-    partial class InitialIdentitySetup
+    [Migration("20250306200917_InitialIndentitySetup")]
+    partial class InitialIndentitySetup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,14 +43,6 @@ namespace ApptSmartBackend.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");

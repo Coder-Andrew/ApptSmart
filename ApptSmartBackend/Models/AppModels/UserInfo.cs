@@ -9,5 +9,9 @@ public partial class UserInfo
 
     public string AspNetIdentityId { get; set; } = null!;
 
+    public string? FirstName { get; set; }
+
+    public string? LastName { get; set; }
+
     public virtual ICollection<UserAppointment> UserAppointments { get; set; } = new List<UserAppointment>();
 }

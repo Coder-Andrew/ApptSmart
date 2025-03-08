@@ -124,20 +124,23 @@ builder.Services.AddSingleton<JwtHelper>();
 
 var app = builder.Build();
 
+
+// Seed basic Identity roles
 using (var scope = app.Services.CreateScope())
 {
+    // TODO: Move off into its own class/method
     var services = scope.ServiceProvider;
     var userManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     await ApplicationSeeder.SeedIdentityRolesAsync(userManager);
 }
-
-//app.UseCors(corsPolicyName); // CHANGE IN PRODUCTIONS
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
 
 //app.UseHttpsRedirection();
 app.UseRouting();
