@@ -14,9 +14,9 @@ namespace ApptSmartBackend.Services.Concrete
     {
         private readonly UserManager<AuthUser> _userManager;
         private readonly JwtHelper _jwtHelper;
-        private readonly IAppUserRepositoryAsync _appUserRepository;
+        private readonly IUserInfoRepositoryAsync _appUserRepository;
         // TODO: Add logging
-        public AuthService(UserManager<AuthUser> userManager, IAppUserRepositoryAsync appUserRepo, JwtHelper jwtHelper)
+        public AuthService(UserManager<AuthUser> userManager, IUserInfoRepositoryAsync appUserRepo, JwtHelper jwtHelper)
         {
             _userManager = userManager;
             _jwtHelper = jwtHelper;

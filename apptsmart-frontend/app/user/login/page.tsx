@@ -25,6 +25,7 @@ const Login = () => {
                 <input type="text" required value={password} placeholder="Password" onChange={(e) => {setPassword(e.target.value)}} />
                 <button type="submit">Login</button>
             </form>
+            <button onClick={() => user.logout()}>Logout</button>
         </>
     );
 }

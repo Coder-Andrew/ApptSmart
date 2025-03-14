@@ -1,5 +1,5 @@
 ### Useful Commands
-`dotnet ef dbcontext scaffold Name=AppConnection Microsoft.EntityFrameworkCore.SqlServer -o Models/AppModels --context AppDbContext --context-dir Models --use-database-names --force`
+`dotnet ef dbcontext scaffold Name=AppConnection Microsoft.EntityFrameworkCore.SqlServer -o Models/AppModels --context AppDbContext --context-dir Models --use-database-names --force --no-onconfiguring`
 
 # Drop Auth Db
 `dotnet ef database drop --context AuthDbContext`

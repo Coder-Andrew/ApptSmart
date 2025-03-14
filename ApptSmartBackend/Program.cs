@@ -48,6 +48,7 @@ string jwtSecret = jwtConfig["Secret"] ?? throw new KeyNotFoundException("Cannot
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddLogging();
 
 
 // Configure CORS // CHANGE IN PRODUCTIONS
@@ -71,9 +72,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlServer(authConnectionString));
 
+var env = builder.Environment.EnvironmentName;
+
 // Setup appdbcontext/app connection
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(appConnectionString));
+{
+    options.UseSqlServer(appConnectionString);
+});
 
 // Setup Identity
 builder.Services.AddIdentity<AuthUser, IdentityRole>()
@@ -115,10 +120,15 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Dependency Injection
-builder.Services.AddScoped<DbContext, AppDbContext>();
+//builder.Services.AddScoped<DbContext, TestDbContext>();
+//builder.Services.AddScoped<DbContext, AppDbContext>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
-builder.Services.AddScoped<IAppUserRepositoryAsync, AppUserRepositoryAsync>();
+builder.Services.AddScoped<IUserAppointmentRepository, UserAppointmentRepository>();
+builder.Services.AddScoped<IUserInfoRepositoryAsync, UserInfoRepositoryAsync>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IUserHelperService, UserHelperService>();
+builder.Services.AddScoped<IUserInfoRepositoryAsync, UserInfoRepositoryAsync>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSingleton<JwtHelper>();
 

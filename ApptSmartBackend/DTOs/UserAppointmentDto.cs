@@ -2,7 +2,7 @@
 {
     public class UserAppointmentDto
     {
-        public int AppointmentId { get; set; }
+        public int Id { get; set; }
         public DateTime? AppointmentTime { get; set; }
     }
     public class UserAppointmentsDto

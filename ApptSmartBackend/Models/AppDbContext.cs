@@ -7,10 +7,6 @@ namespace ApptSmartBackend.Models;
 
 public partial class AppDbContext : DbContext
 {
-    public AppDbContext()
-    {
-    }
-
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
@@ -22,21 +18,18 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<UserInfo> UserInfos { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=AppConnection");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AvailableAppointment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Availabl__3214EC07997CDDE8");
+            entity.HasKey(e => e.Id).HasName("PK__Availabl__3214EC079004A628");
 
             entity.Property(e => e.DateTime).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<UserAppointment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserAppo__3214EC07D3F5AC86");
+            entity.HasKey(e => e.Id).HasName("PK__UserAppo__3214EC07A44FA58F");
 
             entity.Property(e => e.DateTime).HasColumnType("datetime");
 
@@ -48,7 +41,7 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<UserInfo>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserInfo__3214EC07EF791C2D");
+            entity.HasKey(e => e.Id).HasName("PK__UserInfo__3214EC0779A58961");
 
             entity.ToTable("UserInfo");
 

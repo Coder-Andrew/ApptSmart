@@ -35,7 +35,21 @@ namespace ApptSmartBackend.Utilities
                 }
             }),
             new SeedUserInfo("Sarah", "Doe", "User"),
-            new SeedUserInfo("a","a", "Admin"),
+            new SeedUserInfo("a","a", "Admin", new List<UserAppointment>
+            {
+                new UserAppointment
+                {
+                    DateTime = DateTime.Now.AddDays(10).AddHours(5)
+                },
+                new UserAppointment
+                {
+                    DateTime = DateTime.Now.AddDays(-5).AddHours(-5)
+                },
+                new UserAppointment
+                {
+                    DateTime = DateTime.Now.AddDays(2).AddHours(3)
+                }
+            })
         };
     }
 }
