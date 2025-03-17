@@ -9,13 +9,14 @@ using ApptSmartBackend.Models.AppModels;
 
 namespace ApptSmartBackend.Services.Concrete
 {
+    // TODO: Move to an architecture/service layer that returns/handles models
     public class AuthService : IAuthService
     {
         private readonly UserManager<AuthUser> _userManager;
         private readonly JwtHelper _jwtHelper;
-        private readonly IAppUserRepositoryAsync _appUserRepository;
+        private readonly IUserInfoRepositoryAsync _appUserRepository;
         // TODO: Add logging
-        public AuthService(UserManager<AuthUser> userManager, IAppUserRepositoryAsync appUserRepo, JwtHelper jwtHelper)
+        public AuthService(UserManager<AuthUser> userManager, IUserInfoRepositoryAsync appUserRepo, JwtHelper jwtHelper)
         {
             _userManager = userManager;
             _jwtHelper = jwtHelper;
@@ -106,8 +107,6 @@ namespace ApptSmartBackend.Services.Concrete
             {
                 UserName = registerInfo.Email,
                 Email = registerInfo.Email,
-                FirstName = registerInfo.FirstName,
-                LastName = registerInfo.LastName,
             };
 
             IdentityResult result = await _userManager.CreateAsync(user, registerInfo.Password);
@@ -139,7 +138,9 @@ namespace ApptSmartBackend.Services.Concrete
             // TODO: Handle errors when commiting to changes to this db fails
             await _appUserRepository.AddOrUpdateAsync(new UserInfo
             {
-                AspNetIdentityId = user.Id
+                AspNetIdentityId = user.Id,
+                FirstName = registerInfo.FirstName,
+                LastName = registerInfo.LastName,
             });
 
             return new GenericResponse<string>(

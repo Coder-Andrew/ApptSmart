@@ -69,7 +69,7 @@ const RegisterModal = () => {
                     </form>
                     <div className={styles.loginLink}>
                         <span>Have an account?</span>
-                        <Link href={"/login"}>Login</Link>
+                        <Link href={"/user/login"}>Login</Link>
                     </div>
                 </div>
             </div>

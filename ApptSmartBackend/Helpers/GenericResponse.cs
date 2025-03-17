@@ -10,6 +10,8 @@
         SuccessfulLogin,
         UserCreated,
         FailedToAddRole,
+        FailedToGetUserAspNetClaim,
+        FailedToGetUserInfoId
     }
     public class GenericResponse<T>
     {

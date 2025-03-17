@@ -7,7 +7,5 @@ public partial class AvailableAppointment
 {
     public int Id { get; set; }
 
-    public DateTime Time { get; set; }
-
-    public DateOnly Date { get; set; }
+    public DateTime DateTime { get; set; }
 }

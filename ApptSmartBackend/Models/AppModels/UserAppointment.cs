@@ -9,9 +9,7 @@ public partial class UserAppointment
 
     public Guid UserInfoId { get; set; }
 
-    public DateTime Time { get; set; }
-
-    public DateOnly Date { get; set; }
+    public DateTime DateTime { get; set; }
 
     public virtual UserInfo UserInfo { get; set; } = null!;
 }

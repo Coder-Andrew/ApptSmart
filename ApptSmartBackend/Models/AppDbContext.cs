@@ -7,10 +7,6 @@ namespace ApptSmartBackend.Models;
 
 public partial class AppDbContext : DbContext
 {
-    public AppDbContext()
-    {
-    }
-
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
@@ -22,23 +18,20 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<UserInfo> UserInfos { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=AppConnection");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AvailableAppointment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Availabl__3214EC07F2447C31");
+            entity.HasKey(e => e.Id).HasName("PK__Availabl__3214EC079004A628");
 
-            entity.Property(e => e.Time).HasColumnType("datetime");
+            entity.Property(e => e.DateTime).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<UserAppointment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserAppo__3214EC072D70BA79");
+            entity.HasKey(e => e.Id).HasName("PK__UserAppo__3214EC07A44FA58F");
 
-            entity.Property(e => e.Time).HasColumnType("datetime");
+            entity.Property(e => e.DateTime).HasColumnType("datetime");
 
             entity.HasOne(d => d.UserInfo).WithMany(p => p.UserAppointments)
                 .HasForeignKey(d => d.UserInfoId)
@@ -48,12 +41,14 @@ public partial class AppDbContext : DbContext
 
         modelBuilder.Entity<UserInfo>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__UserInfo__3214EC07A59AD28C");
+            entity.HasKey(e => e.Id).HasName("PK__UserInfo__3214EC0779A58961");
 
             entity.ToTable("UserInfo");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newsequentialid())");
             entity.Property(e => e.AspNetIdentityId).HasMaxLength(450);
+            entity.Property(e => e.FirstName).HasMaxLength(150);
+            entity.Property(e => e.LastName).HasMaxLength(150);
         });
 
         OnModelCreatingPartial(modelBuilder);
