@@ -42,5 +42,24 @@ namespace ApptSmartBackend.Controllers
 
             return Ok(appts);
         }
+
+        [HttpGet("pastAppointments")]
+        public ActionResult<UserAppointmentDto> GetPastAppointments()
+        {
+            ActionResult<Guid> userIdResponse = this.GetUserId(_userHelper);
+
+            if (userIdResponse.Result is UnauthorizedResult || userIdResponse.Result is NotFoundResult) return userIdResponse.Result;
+
+            var pastAppointments = _appointmentService.GetPastAppointments(userIdResponse.Value);
+
+
+            List<UserAppointmentDto> appts = pastAppointments.Select(ui => new UserAppointmentDto
+            {
+                Id = ui.Id,
+                AppointmentTime = ui.DateTime
+            }).ToList();
+
+            return Ok(appts);
+        }
     }
 }

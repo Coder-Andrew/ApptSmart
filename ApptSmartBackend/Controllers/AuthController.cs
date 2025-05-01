@@ -45,7 +45,13 @@ namespace ApptSmartBackend.Controllers
 
             if (!response.Success)
             {
-                return StatusCode(400);
+                switch (response.StatusCode) 
+                {
+                    case GenericStatusCode.InvalidCredentials:
+                        return StatusCode(401);
+                    default:
+                        return BadRequest();
+                }
             }
 
             CookieOptions cookieOptions = new CookieOptions

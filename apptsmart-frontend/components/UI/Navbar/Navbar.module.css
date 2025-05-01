@@ -1,0 +1,80 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3vh;
+}
+
+/* Logo and Hamburger */
+.hamBurger {
+    cursor: pointer;
+    display: none;
+}
+
+.logoGroup {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.logoSvg {
+    width: clamp(1.5rem, 3vw, 5.5rem);
+    height: auto;
+}
+
+.logoText {
+    font-weight: 900;
+    font-size: clamp(1.5rem, 3vw, 5.5rem);
+}
+
+.collapsible {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+
+/* Navbar links */
+.navLinkGroup {
+    display: flex;
+    flex-direction: row;
+    gap: clamp(0.5rem, 2vw, 1.5rem);
+    min-width: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex: 1 1 auto;
+}
+
+/* User login/register */
+.navUserGroup {
+    display: flex;
+    gap: 5px;  
+}
+
+.navUserGroup button {
+    padding: 10px 30px;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .navbar, .navLinkGroup, .navUserGroup {
+        flex-direction: column;
+    }
+    .navbar {
+        background-color: color-mix(in srgb, var(--tertiary-color) 50%, transparent);
+        gap: 20px;
+        padding: 20px 0;        
+        /* width: 60%; */
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+    }
+
+    .collapsible {
+        margin-bottom: 10px;
+    }
+
+    .hamBurger {
+        display: inline;
+    }
+}

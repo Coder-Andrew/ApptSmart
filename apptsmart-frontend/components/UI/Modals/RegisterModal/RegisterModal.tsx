@@ -1,12 +1,11 @@
 "use client"
-import Link from "next/link";
 import styles from "./RegisterModal.module.css"
-import Image from "next/image";
 import { Calendar } from "lucide-react";
 import { useModal } from "@/providers/ModalProvider";
+import ModalBase from "../ModalBase";
 
 const RegisterModal = () => {
-    const { closeModal, isModalOpen } = useModal();
+    const { openModal, closeModal, isModalOpen } = useModal();
 
     const modalName = "register";
 
@@ -20,9 +19,9 @@ const RegisterModal = () => {
     ];
 
     return (
-        <div className={styles.modalOverlay} onClick={() => closeModal(modalName)}>
-            <div className={styles.modalContainer} onClick={(e) => e.stopPropagation()}>
-                <div className={styles.modalLeft}>
+        <ModalBase modalName={modalName}>
+            <div className={styles.modalContainer}>
+                <div className={`bg-secondary ${styles.modalLeft}`}>
                     <div className={styles.calendarIconSmall}>
                         <Calendar className="w-6 h-6 text-gray-700" />
                     </div>
@@ -54,7 +53,7 @@ const RegisterModal = () => {
                         </div>
                     </div>
                 </div>
-                <div className={styles.modalRight}>
+                <div className={`${styles.modalRight}`}>
                     <button className={styles.closeButton} onClick={() => closeModal(modalName)}>&times;</button>
                     <h2 className={styles.formTitle}>Get started</h2>
                     <p className={styles.formSubTitle}>Create your account now</p>
@@ -65,15 +64,15 @@ const RegisterModal = () => {
                                 <input type={i.type} placeholder={i.name}/>
                             </div>
                         ))}
-                        <button type="submit" className={styles.signupButton}>Sign Up</button>
+                        <button type="submit" className={`button-primary ${styles.signupButton}`}>Sign Up</button>
                     </form>
                     <div className={styles.loginLink}>
                         <span>Have an account?</span>
-                        <Link href={"/user/login"}>Login</Link>
+                        <p className="text-secondary" onClick={() => {closeModal(modalName); openModal('login')}}>Login</p>
                     </div>
                 </div>
             </div>
-        </div>
+        </ModalBase>
     );
 }
  
