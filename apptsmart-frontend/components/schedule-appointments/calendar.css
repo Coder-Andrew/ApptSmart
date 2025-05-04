@@ -1,0 +1,31 @@
+.calendar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem;
+  }
+  
+  .calendar-wrapper {
+    width: 100%;
+  }
+  
+  .calendar {
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (min-width: 768px) {
+    .calendar-container {
+      flex-direction: row;
+    }
+  
+    .calendar-wrapper {
+      width: auto;
+    }
+  
+    .day-view-container {
+      flex-grow: 1;
+    }
+  }
+  
