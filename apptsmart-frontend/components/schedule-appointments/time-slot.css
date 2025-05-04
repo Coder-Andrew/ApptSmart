@@ -1,0 +1,27 @@
+.time-slot {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  .time-slot.available {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+  
+  .time-slot.available:hover:not(:disabled) {
+    background-color: var(--primary-hover);
+  }
+  
+  .time-slot.taken {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  

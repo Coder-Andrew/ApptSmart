@@ -1,5 +1,6 @@
 "use client"
 
+import { LoginError, LoginErrorCode } from "@/utilities/loginError";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
@@ -62,11 +63,19 @@ export const UserProvider = ({ children } : { children: React.ReactNode }) => {
             credentials: "include"
         });
 
-        console.log(response);
-
         if (!response.ok) {
-            console.error("Error logging user in");
             setUser(null);
+            switch (response.status) {
+                case 401:
+                    throw new LoginError("Incorrect email or password.", LoginErrorCode.INVALID_CREDENTIALS);
+                case 429:
+                    throw new LoginError("Too many login attempts. Try again later.", LoginErrorCode.TOO_MANY_ATTEMPTS);
+                case 500:
+                    throw new LoginError("Server error. Please try again later.", LoginErrorCode.SERVER_ERROR);
+                default:
+                    const errorText = await response.text();
+                    throw new LoginError(errorText || "Unknown error occured, please try again later.", LoginErrorCode.UNKNOWN_ERROR);
+            }
         }
 
         fetchUser();

@@ -1,0 +1,119 @@
+.welcomeContainer {
+    display: flex;
+    background-color: gradient();
+    flex-direction: row;
+    margin-bottom: 100px;
+    max-width: 100%;
+    justify-content: space-between;
+    background: radial-gradient(50% 50% at 50% 50%, var(--tertiary-color) 0%, var(--background-color) 100%);
+}
+
+/* Left side of panel */
+.left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 50%;
+}
+
+/* Rating Banner */
+.ratingBanner {
+    background-color: #F2F7FF;
+    border-radius: 99px;
+    font-size: 10px;
+    padding: 5px 10px;
+    max-width: 75%;
+    text-align: center;
+}
+
+/* Left headers */
+.primaryHeader {
+    font-size: 40px;
+    text-align: left;
+    line-height: 150%;
+    margin-bottom: 0px;
+}
+
+.lineBreak {
+    display: block;
+}
+
+.secondaryHeader {
+    font-size: 12px;
+    text-align: left;
+    line-height: 20px;
+    margin-bottom: 30px;
+}
+
+/* Button group */
+.buttonGroup {
+    display: flex;
+    gap: 10px;
+}
+
+.buttonGroup a {
+    font-size: 10px;
+    padding: 10px 20px;
+}
+
+/* Right side of panel */
+.right {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 50%;
+}
+
+/* User count panel */
+.userCount {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    border: 1px solid grey;
+    padding: 10px 20px;
+    top: -20px;
+    right: -15px;
+    gap: 10px;
+}
+
+.userCount .top {
+    display: flex;
+    gap: 10px;
+}
+
+.userCount .bottom {
+    font-size: 10px;
+}
+
+/* Image styling */
+.right img {
+    width: 100%;
+    height: auto;
+    border-radius: 30px;
+}
+
+@media (max-width: 764px) {
+    .welcomeContainer {
+        flex-direction: column;
+        padding: 20px;
+        align-items: center;
+        max-width: 100%;
+    }
+    .left {
+        margin-bottom: 100px;
+    }
+    .right Img {
+        width: 100%;
+        height: auto;
+    }
+
+    .userCount {
+        right: auto;
+        top: auto;
+        bottom: -20px;
+        left: -50px;
+    }
+}
