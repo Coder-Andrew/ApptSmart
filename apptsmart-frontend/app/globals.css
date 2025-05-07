@@ -51,6 +51,10 @@ a {
     visibility: visible;
 }
 
+.footer-spacer {
+    height: 100vh;
+}
+
 /* Font Styles */
 .font-primary {
     font-family: var(--primary-font);
