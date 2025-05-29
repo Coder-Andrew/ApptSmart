@@ -126,6 +126,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
 builder.Services.AddScoped<IUserAppointmentRepository, UserAppointmentRepository>();
 builder.Services.AddScoped<IUserInfoRepositoryAsync, UserInfoRepositoryAsync>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IUserHelperService, UserHelperService>();
 builder.Services.AddScoped<IUserInfoRepositoryAsync, UserInfoRepositoryAsync>();

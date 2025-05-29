@@ -26,12 +26,22 @@ namespace ApptSmartBackend.Utilities
             new SeedUserInfo("John", "Doe", "User", new List<UserAppointment>
             {
                 new UserAppointment
-                {   
-                    DateTime = DateTime.Now.AddDays(10).AddHours(-10)
+                {
+                    BookedAt = DateTime.Now.AddDays(-10),
+                    Appointment = new Appointment
+                    {
+                        StartTime = DateTime.Now.AddDays(-5),
+                        EndTime = DateTime.Now.AddDays(-5).AddMinutes(30)
+                    }
                 },
                 new UserAppointment
                 {
-                    DateTime = DateTime.Now.AddDays(-5).AddHours(-5)
+                    BookedAt = DateTime.Now.AddDays(5),
+                    Appointment = new Appointment
+                    {
+                        StartTime = DateTime.Now.AddDays(10),
+                        EndTime = DateTime.Now.AddDays(10).AddHours(2)
+                    }
                 }
             }),
             new SeedUserInfo("Sarah", "Doe", "User"),
@@ -39,15 +49,30 @@ namespace ApptSmartBackend.Utilities
             {
                 new UserAppointment
                 {
-                    DateTime = DateTime.Now.AddDays(10).AddHours(5)
+                    BookedAt = DateTime.Now.AddDays(10).AddHours(5),
+                    Appointment = new Appointment
+                    {
+                        StartTime = DateTime.Now.AddDays(11).AddHours(5),
+                        EndTime = DateTime.Now.AddDays(12),
+                    }
                 },
                 new UserAppointment
                 {
-                    DateTime = DateTime.Now.AddDays(-5).AddHours(-5)
+                    BookedAt = DateTime.Now.AddDays(-5).AddHours(-5),
+                    Appointment = new Appointment
+                    {
+                        StartTime = DateTime.Now.AddDays(-5).AddHours(-1),
+                        EndTime = DateTime.Now.AddDays(-5)
+                    }
                 },
                 new UserAppointment
                 {
-                    DateTime = DateTime.Now.AddDays(2).AddHours(3)
+                    BookedAt = DateTime.Now,
+                    Appointment = new Appointment
+                    {
+                        StartTime = DateTime.Now.AddDays(60).AddHours(2),
+                        EndTime = DateTime.Now.AddDays(61)
+                    }
                 }
             })
         };

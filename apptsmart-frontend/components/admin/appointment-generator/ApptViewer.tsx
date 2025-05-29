@@ -1,17 +1,20 @@
-import styles from './ApptView.module.css';
+import styles from './ApptViewer.module.css';
+import { FaRegTrashAlt } from "react-icons/fa";
 
 type ApptViewerProps = {
-    appointments: Record<string, Appointment[]>;
+    appointments: AppointmentMap;
+    handleDelete: (date: string, index: number) => void;
+    handleUndo: (date: string, index: number) => void;
 };
 
-const ApptViewer = ({ appointments }: ApptViewerProps) => {
+const ApptViewer = ({ appointments, handleDelete, handleUndo }: ApptViewerProps) => {
     const formatDate = (isoDate: string) => {
         const [year, month, day] = isoDate.split('-').map(Number);
         // Create date in local timezone to avoid UTC conversion issues
         const dateObj = new Date(year, month - 1, day);
         return dateObj.toLocaleDateString(undefined, {
             weekday: "short",
-            month: "short",
+            month: "numeric",
             day: "numeric"
         });
     };
@@ -32,29 +35,41 @@ const ApptViewer = ({ appointments }: ApptViewerProps) => {
 
     if (Object.keys(appointments).length === 0) return null;
 
+    const allDates = Object.keys(appointments)
     const numSlots = Math.max(...Object.values(appointments).map(list => list.length));
 
+    // TODO: Add some more interaction besides just click to delete
     return (
-        <table className={styles.table}>
-            <thead>
-                <tr>
-                    {Object.keys(appointments).map(date => (
-                        <th key={date}>{formatDate(date)}</th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {Array.from({ length: numSlots }).map((_, i) => (
-                    <tr key={i}>
-                        {Object.keys(appointments).map(day => (
-                            <td key={day + i}>
-                                {appointments[day][i] ? formatAppt(appointments[day][i]) : ''}
-                            </td>
+        <div className={`${styles.tableWrapper}`}>
+            <table className={`${styles.table}`}>
+                <thead>
+                    <tr>
+                        {allDates.map(day => (
+                            <th key={day} className={`bg-tertiary`}>{formatDate(day)}</th>
                         ))}
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {Array.from({ length: numSlots }).map((_, i) => (
+                        <tr key={i}>
+                            {allDates.map(day => {
+                                const appt = appointments[day][i];
+                                return (
+                                    <td 
+                                        key={day + i}
+                                        className={`cursor-pointer no-select ${appt.active ? styles.active : styles.disabled}`}
+                                        onClick={() => appt.active ? handleDelete(day, i) : handleUndo(day, i)}
+                                    >
+                                        <FaRegTrashAlt className={`text-error ${styles.trash}`} />
+                                        <span className={styles.apptText}>{formatAppt(appt)}</span>
+                                    </td>
+                                )
+                            })}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     );
 };
 

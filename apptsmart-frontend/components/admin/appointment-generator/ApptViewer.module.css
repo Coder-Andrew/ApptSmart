@@ -1,0 +1,110 @@
+/* .table {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+.table td {
+    border: 1px solid black;
+} */
+
+
+/* TODO: Make overflow only work for table, so Post button doesn't scroll out of view */
+.tableWrapper {
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: 500px;
+    max-width: 100%;
+    --transition-time: 0.2s;
+}
+
+.table {
+    min-width: 1200px;
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.table thead {
+    background-color: #f4f4f4;
+}
+
+.table th, .table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #ccc;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    /* background-color: #f4f4f4; */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+}
+
+/* Appointments */
+.table td {
+    position: relative;
+    border-radius: 20px;
+}
+
+/* Trash icon */
+.trash {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+}
+
+/* Disabled styles */
+.disabled .apptText {
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+
+/* Active styles and effects */
+.apptText {
+    display: inline-block;
+    transition: opacity var(--transition-time) ease-in-out;
+}
+
+.active {
+    transition: background-color var(--transition-time) ease-in-out;
+}
+
+.active:hover {
+    background-color: rgba(255, 0, 0, 0.1)
+}
+
+.active:hover .apptText {
+    opacity: 0.1;
+}
+
+.active:hover .trash{
+    opacity: 1;
+    transition: opacity var(--transition-time) ease-in-out;
+}
+
+
+.buttonWrapper {
+    margin-top: 20px;
+    text-align: center;
+}
+.buttonWrapper button {
+    padding: 10px 30px;
+}
+
+
+@media (max-width: 600px) {
+    .table {
+
+        white-space: nowrap;
+    }
+}

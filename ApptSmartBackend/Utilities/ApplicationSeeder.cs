@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace ApptSmartBackend.Utilities
 {
-    // Should probably move this class into the console app for seeding
+    // TODO: Need to adjust nav property remover method to correctly remove associated appointment
     public static class ApplicationSeeder
     {
         public static async Task SeedIdentityRolesAsync(RoleManager<IdentityRole> roleManager)
@@ -49,15 +49,49 @@ namespace ApptSmartBackend.Utilities
             {
                 AuthUser? authUser = await userManager.FindByIdAsync(id);
                 if (authUser != null) await userManager.DeleteAsync(authUser);
-                UserInfo userInfo = await appContext.UserInfos.FirstAsync(ui => ui.AspNetIdentityId == id);
-                var appts = userInfo.UserAppointments;
+
+                var userInfo = await appContext.UserInfos
+                    .Include(u => u.UserAppointments)
+                        .ThenInclude(ua => ua.Appointment) // Eager load the nested appointment
+                    .FirstOrDefaultAsync(ui => ui.AspNetIdentityId == id);
+
                 if (userInfo != null)
                 {
-                    RemoveAppUserNavProps(appContext, userInfo);
+                    await RemoveAppUserNavProps(appContext, userInfo);
                     appContext.UserInfos.Remove(userInfo);
                     await appContext.SaveChangesAsync();
                 }
             }
+        }
+
+        private static async Task RemoveAppUserNavProps(AppDbContext appContext, UserInfo userInfo)
+        {
+            await RemoveUsersAppts(appContext, userInfo);
+        }
+
+        private static async Task RemoveUsersAppts(AppDbContext appContext, UserInfo userInfo)
+        {
+            foreach (var userAppt in userInfo.UserAppointments.ToList()) // ToList() avoids modifying the collection during iteration
+            {
+                var appointmentId = userAppt.AppointmentId;
+
+                // Remove the UserAppointment link
+                appContext.UserAppointments.Remove(userAppt);
+
+                // Check if any other users are still linked to this appointment
+                bool isOrphaned = !await appContext.UserAppointments
+                    .AnyAsync(ua => ua.AppointmentId == appointmentId && ua.UserInfoId != userInfo.Id);
+
+                if (isOrphaned)
+                {
+                    var appointment = await appContext.Appointments.FindAsync(appointmentId);
+                    if (appointment != null)
+                    {
+                        appContext.Appointments.Remove(appointment);
+                    }
+                }
+            }
+            await appContext.SaveChangesAsync();
         }
 
         public static async Task<List<string>> GetSeededUserIds(UserManager<AuthUser> userManager, AppDbContext appContext, SeedUserInfo[] seedData)
@@ -117,27 +151,6 @@ namespace ApptSmartBackend.Utilities
 
             await appContext.UserInfos.AddAsync(userInfo);
             await appContext.SaveChangesAsync();
-        }
-
-        private static void RemoveAppUserNavProps(AppDbContext appContext, UserInfo userInfo)
-        {
-            var entry = appContext.Entry(userInfo);
-
-            foreach (var navigation in entry.Navigations)
-            {
-                if (navigation.Metadata.IsCollection)
-                {
-                    var navCurrentValue = navigation.CurrentValue;
-                    if (navCurrentValue != null)
-                    {
-                        var relatedEntities = (IEnumerable<object>)navCurrentValue;
-                        if (relatedEntities != null)
-                        {
-                            appContext.RemoveRange(relatedEntities);
-                        }
-                    }
-                }
-            }
         }
     }
 }

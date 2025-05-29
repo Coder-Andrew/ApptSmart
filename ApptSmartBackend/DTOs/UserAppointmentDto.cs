@@ -1,13 +1,12 @@
-﻿namespace ApptSmartBackend.DTOs
+﻿using ApptSmartBackend.Models.AppModels;
+
+namespace ApptSmartBackend.DTOs
 {
     public class UserAppointmentDto
     {
         public int Id { get; set; }
-        public DateTime? AppointmentTime { get; set; }
+        public AppointmentDto Appointment { get; set; } = new();
+        public DateTime? BookedAt { get; set; }
     }
-    public class UserAppointmentsDto
-    {
-        public List<UserAppointmentDto> FutureAppointments { get; set; } = new();
-        public List<UserAppointmentDto> PastAppointments { get; set; } = new();
-    }
+
 }

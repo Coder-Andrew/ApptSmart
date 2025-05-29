@@ -1,2 +1,2 @@
-type Appointment = { start: Date; end: Date };
+type Appointment = { start: Date; end: Date, active: boolean };
 type AppointmentMap = Record<string, Appointment[]>;

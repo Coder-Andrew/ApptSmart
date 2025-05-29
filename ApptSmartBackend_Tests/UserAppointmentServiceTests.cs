@@ -26,15 +26,31 @@ public class UserAppointmentServiceTests : TestDbHelper
             context.UserInfos.Add(new UserInfo { Id = kvp.Value, AspNetIdentityId = Guid.NewGuid().ToString(), FirstName = kvp.Key.Item1, LastName = kvp.Key.Item2 });
         }
 
-        context.UserAppointments.AddRange(
-            new UserAppointment { Id = 1, UserInfoId = userInfo[("John", "Doe")], DateTime = DateTime.Now.AddDays(5) },
-            new UserAppointment { Id = 2, UserInfoId = userInfo[("John", "Doe")], DateTime = DateTime.Now.AddDays(7) },
-            new UserAppointment { Id = 3, UserInfoId = userInfo[("John", "Doe")], DateTime = DateTime.Now.AddDays(-2) },
-            new UserAppointment { Id = 4, UserInfoId = userInfo[("John", "Doe")], DateTime = DateTime.Now.AddDays(-3) },
-            new UserAppointment { Id = 5, UserInfoId = userInfo[("John", "Doe")], DateTime = DateTime.Now.AddDays(10) },
 
-            new UserAppointment { Id = 6, UserInfoId = userInfo[("Sally", "Doe")], DateTime = DateTime.Now.AddDays(-2) },
-            new UserAppointment { Id = 7, UserInfoId = userInfo[("Sally", "Doe")], DateTime = DateTime.Now.AddDays(-3) }
+        List<Appointment> appts = new()
+        {
+            new Appointment { Id=1, StartTime = DateTime.Now.AddDays(5), EndTime = DateTime.Now.AddDays(5).AddMinutes(60) },
+            new Appointment { Id=2, StartTime = DateTime.Now.AddDays(7), EndTime = DateTime.Now.AddDays(7).AddMinutes(30) },
+            new Appointment { Id=3, StartTime = DateTime.Now.AddDays(-2), EndTime = DateTime.Now.AddDays(-2).AddMinutes(20) },
+            new Appointment { Id=4, StartTime = DateTime.Now.AddDays(-3), EndTime = DateTime.Now.AddDays(-3).AddMinutes(65) },
+            new Appointment { Id=5, StartTime = DateTime.Now.AddDays(10), EndTime = DateTime.Now.AddDays(10).AddMinutes(120) },
+
+            new Appointment { Id=6, StartTime = DateTime.Now.AddDays(-2), EndTime = DateTime.Now.AddDays(-2).AddHours(2) },
+            new Appointment { Id=7, StartTime = DateTime.Now.AddDays(-3), EndTime = DateTime.Now.AddDays(-3).AddHours(6) }
+        };
+
+
+        context.Appointments.AddRange(appts);
+
+        context.UserAppointments.AddRange(
+            new UserAppointment { Id = 1, UserInfoId = userInfo[("John", "Doe")], Appointment = appts[0], BookedAt = DateTime.Now.AddDays(5).AddMinutes(60) },
+            new UserAppointment { Id = 2, UserInfoId = userInfo[("John", "Doe")], Appointment = appts[1], BookedAt = DateTime.Now.AddDays(7).AddMinutes(30) },
+            new UserAppointment { Id = 3, UserInfoId = userInfo[("John", "Doe")], Appointment = appts[2], BookedAt = DateTime.Now.AddDays(-2).AddMinutes(20) },
+            new UserAppointment { Id = 4, UserInfoId = userInfo[("John", "Doe")], Appointment = appts[3], BookedAt = DateTime.Now.AddDays(-3).AddMinutes(65) },
+            new UserAppointment { Id = 5, UserInfoId = userInfo[("John", "Doe")], Appointment = appts[4], BookedAt = DateTime.Now.AddDays(10).AddMinutes(120) },
+
+            new UserAppointment { Id = 6, UserInfoId = userInfo[("Sally", "Doe")], Appointment = appts[5], BookedAt = DateTime.Now.AddDays(-2).AddMinutes(2) },
+            new UserAppointment { Id = 7, UserInfoId = userInfo[("Sally", "Doe")], Appointment = appts[6], BookedAt = DateTime.Now.AddDays(-3).AddHours(6) }
         );
 
         context.SaveChanges();

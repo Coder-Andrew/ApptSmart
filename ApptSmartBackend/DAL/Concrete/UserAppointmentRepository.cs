@@ -17,15 +17,13 @@ namespace ApptSmartBackend.DAL.Concrete
         public IEnumerable<UserAppointment> GetFutureAppointments(Guid userId)
         {
             return _userAppointments
-                .Where(ua => ua.UserInfoId == userId && ua.DateTime >= DateTime.Now)
-                .OrderBy(ua => ua.DateTime);
+                .Where(ua => ua.UserInfoId == userId && ua.Appointment.StartTime >= DateTime.Now);
         }
 
         public IEnumerable<UserAppointment> GetPastAppointments(Guid userId)
         {
             return _userAppointments
-                .Where(ua => ua.UserInfoId == userId && ua.DateTime < DateTime.Now)
-                .OrderBy(ua => ua.DateTime);
+                .Where(ua => ua.UserInfoId == userId && ua.Appointment.StartTime < DateTime.Now);
         }
     }
 }

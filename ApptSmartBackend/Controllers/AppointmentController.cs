@@ -1,10 +1,12 @@
 ﻿using ApptSmartBackend.DAL.Abstract;
 using ApptSmartBackend.DTOs;
 using ApptSmartBackend.Extensions;
+using ApptSmartBackend.Models.AppModels;
 using ApptSmartBackend.Services;
 using ApptSmartBackend.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 
 namespace ApptSmartBackend.Controllers
@@ -34,11 +36,7 @@ namespace ApptSmartBackend.Controllers
 
             var futureAppointments = _appointmentService.GetFutureAppointments(userIdResponse.Value);
 
-            List<UserAppointmentDto> appts = futureAppointments.Select(ui => new UserAppointmentDto
-            {
-                Id = ui.Id,
-                AppointmentTime = ui.DateTime
-            }).ToList();
+            List<UserAppointmentDto> appts = futureAppointments.Select(ui => ui.ToDto()).ToList();
 
             return Ok(appts);
         }
@@ -53,13 +51,31 @@ namespace ApptSmartBackend.Controllers
             var pastAppointments = _appointmentService.GetPastAppointments(userIdResponse.Value);
 
 
-            List<UserAppointmentDto> appts = pastAppointments.Select(ui => new UserAppointmentDto
-            {
-                Id = ui.Id,
-                AppointmentTime = ui.DateTime
-            }).ToList();
+            List<UserAppointmentDto> appts = pastAppointments.Select(ui => ui.ToDto()).ToList();
 
             return Ok(appts);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("create")]
+        public ActionResult CreateAppointments([FromBody] List<CreateAppointmentDto> appointments)
+        {
+            try
+            {
+                List<Appointment> appts = appointments.Select(a => new Appointment
+                {
+                    StartTime = a.StartTime,
+                    EndTime = a.EndTime
+                }).ToList();
+
+                _appointmentService.CreateAppointments(appts);
+
+                return Created();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

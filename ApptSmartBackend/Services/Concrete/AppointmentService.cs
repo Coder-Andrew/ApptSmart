@@ -8,9 +8,11 @@ namespace ApptSmartBackend.Services.Concrete
     public class AppointmentService : IAppointmentService
     {
         private readonly IUserAppointmentRepository _userAppointmentsRepo;
-        public AppointmentService(IUserAppointmentRepository userAppointmentsRepo)
+        private readonly IAppointmentRepository _appointmentRepo;
+        public AppointmentService(IUserAppointmentRepository userAppointmentsRepo, IAppointmentRepository appointmentRepo)
         {
             _userAppointmentsRepo = userAppointmentsRepo;
+            _appointmentRepo = appointmentRepo;
         }
 
         public IEnumerable<UserAppointment> GetFutureAppointments(Guid userId)
@@ -21,6 +23,11 @@ namespace ApptSmartBackend.Services.Concrete
         public IEnumerable<UserAppointment> GetPastAppointments(Guid userId)
         {
             return _userAppointmentsRepo.GetPastAppointments(userId);
+        }
+
+        public void CreateAppointments(List<Appointment> appts)
+        {
+            _appointmentRepo.AddRange(appts);
         }
     }
 }
