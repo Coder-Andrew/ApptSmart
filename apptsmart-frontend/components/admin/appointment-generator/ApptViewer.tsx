@@ -19,7 +19,7 @@ const ApptViewer = ({ appointments, handleDelete, handleUndo }: ApptViewerProps)
         });
     };
 
-    const formatAppt = ({ start, end }: Appointment) => {
+    const formatAppt = ({ start, end }: AdminAppointment) => {
         // No need to do any timezone conversion here since the Date objects
         // already have the correct time information
         const startTime = start.toLocaleTimeString(undefined, {

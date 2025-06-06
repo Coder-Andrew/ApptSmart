@@ -26,7 +26,7 @@ export const UserProvider = ({ children } : { children: React.ReactNode }) => {
     const fetchUser = async () => {
         try {
             setAuthReady(false);
-            const response = await fetch("/api/auth/me",{
+            const response = await fetch("/api/backend/auth/me",{
                 method: "GET",
                 credentials: "include"
             });
@@ -46,7 +46,7 @@ export const UserProvider = ({ children } : { children: React.ReactNode }) => {
     };
 
     const logout = async () => {
-        const response = await fetch("/api/auth/logout",{
+        const response = await fetch("/api/backend/auth/logout",{
             method: "GET",
             credentials: "include"
         });
@@ -56,7 +56,7 @@ export const UserProvider = ({ children } : { children: React.ReactNode }) => {
     };
 
     const login = async (email: string, password: string) => {
-        const response = await fetch("/api/auth/login", {
+        const response = await fetch("/api/backend/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),

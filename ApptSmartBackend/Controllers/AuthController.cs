@@ -57,8 +57,8 @@ namespace ApptSmartBackend.Controllers
             CookieOptions cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true, // CHANGE IN PRODUCTION 
-                SameSite = SameSiteMode.None, // CHANGE IN PRODUCTIONS
+                Secure = true, 
+                SameSite = SameSiteMode.None, 
                 Expires = DateTime.Now.AddMinutes(_jwtSettings.ExpiryMinutes)
             };
 

@@ -26,6 +26,10 @@ namespace ApptSmartBackend.Controllers
             _userHelper = userHelper;
         }
 
+        // TODO: Fix future and past appointments, needs eager loading, needs proper dtos
+        // !!!
+        // !!!
+        // !!!
         [HttpGet("futureAppointments")]
         public ActionResult<UserAppointmentDto> GetFutureAppointments()
         {
@@ -34,7 +38,7 @@ namespace ApptSmartBackend.Controllers
             if (userIdResponse.Result is UnauthorizedResult || userIdResponse.Result is NotFoundResult) return userIdResponse.Result;
 
 
-            var futureAppointments = _appointmentService.GetFutureAppointments(userIdResponse.Value);
+            var futureAppointments = _appointmentService.GetFutureAppointments(userIdResponse.Value).ToList();
 
             List<UserAppointmentDto> appts = futureAppointments.Select(ui => ui.ToDto()).ToList();
 
@@ -54,6 +58,20 @@ namespace ApptSmartBackend.Controllers
             List<UserAppointmentDto> appts = pastAppointments.Select(ui => ui.ToDto()).ToList();
 
             return Ok(appts);
+        }
+
+        [HttpGet("available")]
+        public ActionResult<List<AppointmentDto>> GetAvailableAppointments([FromQuery] DateTime date)
+        {
+            if (date == default)
+            {
+                
+                return BadRequest("Invalid date format");
+            }
+
+            return Ok(_appointmentService.GetAvailableAppointments(date)
+                .Select(a => a.ToDto())
+                .ToList());
         }
 
         [Authorize(Roles = "Admin")]

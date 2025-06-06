@@ -36,7 +36,11 @@ public class UserAppointmentServiceTests : TestDbHelper
             new Appointment { Id=5, StartTime = DateTime.Now.AddDays(10), EndTime = DateTime.Now.AddDays(10).AddMinutes(120) },
 
             new Appointment { Id=6, StartTime = DateTime.Now.AddDays(-2), EndTime = DateTime.Now.AddDays(-2).AddHours(2) },
-            new Appointment { Id=7, StartTime = DateTime.Now.AddDays(-3), EndTime = DateTime.Now.AddDays(-3).AddHours(6) }
+            new Appointment { Id=7, StartTime = DateTime.Now.AddDays(-3), EndTime = DateTime.Now.AddDays(-3).AddHours(6) },
+
+            new Appointment { Id=8, StartTime = DateTime.Now.AddDays(-3), EndTime = DateTime.Now.AddDays(-3).AddHours(2) },
+            new Appointment { Id=9, StartTime = DateTime.Now.AddDays(-5), EndTime = DateTime.Now.AddDays(-5).AddHours(3) },
+            new Appointment { Id=10, StartTime = DateTime.Now.AddDays(10), EndTime = DateTime.Now.AddDays(11).AddHours(2) },
         };
 
 
@@ -73,7 +77,6 @@ public class UserAppointmentServiceTests : TestDbHelper
             yield return new TestCaseData(userInfo[("Sally", "Doe")], new List<int> { 6, 7 }).SetName("Sally_Doe_Past_Appts");
         }
     }
-
 
 
     [TestCaseSource(nameof(FutureUserAppointmentCases))]
@@ -116,5 +119,6 @@ public class UserAppointmentServiceTests : TestDbHelper
         }
     }
 
-
+    [TestCaseSource(nameof(AvailableAppointmentCases))]
+    public async Task GetAvailableAppointments(Guid userId, List<int> expectedAppointmentIds)
 }

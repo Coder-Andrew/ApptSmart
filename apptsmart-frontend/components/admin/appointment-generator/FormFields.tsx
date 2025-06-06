@@ -105,7 +105,7 @@ const FormFields = ({ onGenerate }: FormFieldsProps) => {
 
     const generate = () => {
         if (!validateInputs()) return;
-        const apptDates: Record<string, Appointment[]> = {};
+        const apptDates: Record<string, AdminAppointment[]> = {};
 
         // Create start and end dates using local time
         const startDateObj = new Date(startDate);

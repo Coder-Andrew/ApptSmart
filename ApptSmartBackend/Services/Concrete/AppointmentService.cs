@@ -29,5 +29,10 @@ namespace ApptSmartBackend.Services.Concrete
         {
             _appointmentRepo.AddRange(appts);
         }
+
+        public IEnumerable<Appointment> GetAvailableAppointments(DateTime date)
+        {
+            return _appointmentRepo.GetAvailableAppointments(date);
+        }
     }
 }

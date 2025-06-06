@@ -1,34 +1,84 @@
+'use client'
+
 import { format } from "date-fns"
 import { TimeSlot } from "./time-slot"
-import "./day-view.css"
+import styles from "./day-view.module.css"
+import { useEffect, useState } from "react"
+import { Appointment, RawAppointment } from "@/lib/types"
+import { toAppointment } from "@/utilities/helpers"
+
 
 interface DayViewProps {
   date: Date
 }
 
 export function DayView({ date }: DayViewProps) {
-  // This would typically come from your backend
-  const takenSlots = ["10:00 AM", "2:00 PM", "4:30 PM"]
+  const [dayError, setDayError] = useState<string>('');
+  const [timeSlots, setTimeSlots] = useState<Appointment[]>([]);
+  const [ selectedAppt, setSelectedAppt ] = useState<number|null>(null);
 
-  const timeSlots = []
-  for (let hour = 9; hour < 21; hour++) {
-    for (let minute = 0; minute < 60; minute += 30) {
-      const time = new Date(date)
-      time.setHours(hour, minute)
-      const formattedTime = format(time, "h:mm a")
-      const isTaken = takenSlots.includes(formattedTime)
-      timeSlots.push({ time: formattedTime, isTaken })
+  console.log(selectedAppt);
+
+  useEffect(() =>{
+    getAvailableAppointments();
+    setSelectedAppt(null);
+  },[date]);
+
+  const getAvailableAppointments = async () => {
+    // TODO: Left off trying to get response from backend
+    setDayError('');
+    const params = new URLSearchParams({
+      date: date.toISOString().split('T')[0]
+    });
+    const res = await fetch(`/api/backend/appointments/available?${params}`, {
+      method: "GET"
+    });
+
+    if (!res.ok) {
+      // TODO: Add better error handling
+      setDayError('An error has occured, try again later.');
+      return;
     }
+    console.log(res)
+    const data = await res.json();
+
+    const dateData = data
+      .map((a: RawAppointment) => toAppointment(a))
+      .sort((a: Appointment, b: Appointment) => {
+        return a.startTime.getTime() - b.startTime.getTime();
+      });
+
+
+    setTimeSlots(dateData);
   }
 
+
   return (
-    <div className="day-view">
-      <h2 className="day-title">{format(date, "MMMM d, yyyy")}</h2>
-      <div className="time-slots-grid">
-        {timeSlots.map((slot) => (
-          <TimeSlot key={slot.time} time={slot.time} isTaken={slot.isTaken} />
-        ))}
+    <div className={styles.dayView}>
+      {dayError && <p className="text-error">{ dayError }</p>}
+      <h2 className={styles.dayTitle}>{format(date, "MMMM d, yyyy")}</h2>
+      <div className={styles.timeSlotsGrid}>
+        {timeSlots.length !== 0 ? timeSlots.map((slot) => (
+          <TimeSlot 
+            key={slot.id}
+            id={slot.id}
+            startTime={slot.startTime}
+            endTime={slot.endTime}
+            onSelect={() => setSelectedAppt(slot.id)}
+            isSelected={selectedAppt === slot.id}
+          />
+        )) :
+        (
+          <div className="text-error">No available appointments for this date</div>
+        )
+        
+      }
       </div>
+      {selectedAppt && (
+        <div className={styles.bookButton}>
+          <button className={`button-primary cursor-pointer`}>Book</button>
+        </div>
+      )}
     </div>
   )
 }

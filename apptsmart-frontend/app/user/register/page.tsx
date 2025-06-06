@@ -20,7 +20,7 @@ const Register = () => {
 
         const body = JSON.stringify({ firstName, lastName, email, password });
 
-        const response = await fetch("/api/auth/register", {
+        const response = await fetch("/api/backend/auth/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: body

@@ -1,4 +1,4 @@
-const Appointment = ({start, end}: Appointment) => {
+const Appointment = ({start, end}: AdminAppointment) => {
     return (
         <></>
     );

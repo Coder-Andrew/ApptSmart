@@ -12,5 +12,11 @@ namespace ApptSmartBackend.DAL.Concrete
         {
             _appointments = ctx.Appointments;
         }
+
+        public IEnumerable<Appointment> GetAvailableAppointments(DateTime date)
+        {
+            return _appointments
+                .Where(a => a.StartTime.Date == date.Date && a.UserAppointment == null);
+        }
     }
 }

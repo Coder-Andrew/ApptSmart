@@ -2,16 +2,15 @@
 import ApptViewer from "@/components/admin/appointment-generator/ApptViewer";
 import FormFields from "@/components/admin/appointment-generator/FormFields";
 import TimeSelect from "@/components/admin/appointment-generator/TimeSelect";
-import ErrorableFormField from "@/components/UI/ErrorableFormField";
+import { AppointmentMap } from "@/lib/types"
 import { useEffect, useState } from "react";
-
-
 
 const AdminPage = () => {
     // TODO: Need to add validation to ensure user is an admin, logic won't be here
+    // TODO: Move off into a component, keep the admin page clean and composed of admin components
     const [ appointments, setAppointments ] = useState<AppointmentMap>({});
-    console.log(Object.keys(appointments));
-    console.log(appointments)
+    const [ postError, setPostError ] = useState<string>('');
+    const [ postSuccess, setPostSuccess ] = useState<string>('');
 
     const handleDelete = (day: string, index: number) => {
         setAppointments(prev => {
@@ -39,9 +38,12 @@ const AdminPage = () => {
 
     // TODO: Add error handling and confirmation message
     const onPost = async () => {
+        setPostError('');
+        setPostSuccess('');
         const payLoad = formatApptsForBackend(appointments);
-        console.log(JSON.stringify(payLoad));
-        const res = await fetch("/api/appointments/create", {
+        if (payLoad.length <= 0) return;
+
+        const res = await fetch("/api/backend/appointments/create", {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -49,7 +51,12 @@ const AdminPage = () => {
             body: JSON.stringify(payLoad)
         });
 
-        console.log(res);
+        if (!res.ok) {
+            // TODO: Add more specific errors -- unauthorized, server error, etc...
+            setPostError('Error occured when creating appointments, please try again later.');
+        } else {
+            setPostSuccess(`Successfully created ${payLoad.length} appointments!`);
+        }
     }
 
     const formatApptsForBackend = (appointments: AppointmentMap):{startTime: string, endTime: string}[] => {
@@ -65,19 +72,25 @@ const AdminPage = () => {
     return (
         <>
             <div className={`container`}>
+                { postError && (
+                    <p className="text-error">{ postError }</p>
+                )}
+                { postSuccess && (
+                    <p className="text-success">{ postSuccess }</p>
+                )}
                 <FormFields onGenerate={setAppointments} />
                 <ApptViewer 
                     appointments={appointments}
                     handleDelete={handleDelete}
                     handleUndo={handleUndo}
                 />
+                { appointments && (<button 
+                    className="button-primary cursor-pointer"
+                    onClick={() => onPost()}
+                >
+                    Post Appointments
+                </button>)}
             </div>
-            <button 
-                className="button-primary cursor-pointer"
-                onClick={() => onPost()}
-            >
-                Post Appointments
-            </button>
             <div className="footer-spacer"></div>
         </>
     );

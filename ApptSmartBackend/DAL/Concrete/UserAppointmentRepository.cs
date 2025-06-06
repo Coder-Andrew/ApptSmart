@@ -16,13 +16,16 @@ namespace ApptSmartBackend.DAL.Concrete
 
         public IEnumerable<UserAppointment> GetFutureAppointments(Guid userId)
         {
+            // TODO: Fix eager loading issue
             return _userAppointments
+                .Include(a => a.Appointment)
                 .Where(ua => ua.UserInfoId == userId && ua.Appointment.StartTime >= DateTime.Now);
         }
 
         public IEnumerable<UserAppointment> GetPastAppointments(Guid userId)
         {
             return _userAppointments
+                .Include(a => a.Appointment)
                 .Where(ua => ua.UserInfoId == userId && ua.Appointment.StartTime < DateTime.Now);
         }
     }

@@ -42,7 +42,7 @@ builder.Services
 
 string jwtSecret = jwtConfig["Secret"] ?? throw new KeyNotFoundException("Cannot find JWT Secret");
 
-// CorsSettings corsSettings = builder.Configuration.GetSection("Cors").Get<CorsSettings>() ?? throw new KeyNotFoundException("Cannot find CORS settings");
+CorsSettings corsSettings = builder.Configuration.GetSection("Cors").Get<CorsSettings>() ?? throw new KeyNotFoundException("Cannot find CORS settings");
 
 // Add services to the container
 builder.Services.AddControllers();
@@ -51,22 +51,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddLogging();
 
 
-// Configure CORS // CHANGE IN PRODUCTIONS
-//string corsPolicyName = "frontendCorsPolicy";
-
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy(corsPolicyName, policy =>
-//    {
-//        foreach (string site in corsSettings.AllowedSites)
-//        {
-//            policy.WithOrigins(site)
-//                .AllowAnyHeader()
-//                .AllowAnyMethod()
-//                .AllowCredentials();
-//        }
-//    });
-//});
+// Configure CORS // CHANGE IN PRODUCTION
+string corsPolicyName = "TrustedFrontendClients";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(corsPolicyName, policy =>
+    {
+        policy.WithOrigins(corsSettings.AllowedSites.ToArray())
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 // Add Identity with sql server
 builder.Services.AddDbContext<AuthDbContext>(options =>
@@ -154,8 +150,8 @@ if (app.Environment.IsDevelopment())
 
 
 //app.UseHttpsRedirection();
+app.UseCors(corsPolicyName);
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

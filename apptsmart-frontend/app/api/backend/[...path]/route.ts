@@ -8,7 +8,8 @@ if (!backendURL) {
 export async function handler(req: NextRequest, { params }: { params: { path: string[] } }) {
     // Convert the path array to a valid backend API path
     const backendPath = (await params).path.join("/");
-    const url = `${backendURL}/api/${backendPath}`;
+    const query = req.nextUrl.search;
+    const url = `${backendURL}/api/${backendPath}${query}`;
 
     console.log(url);
 
