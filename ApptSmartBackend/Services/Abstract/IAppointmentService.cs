@@ -9,6 +9,6 @@ namespace ApptSmartBackend.Services.Abstract
         public IEnumerable<UserAppointment> GetPastAppointments(Guid userId);
         public IEnumerable<Appointment> GetAvailableAppointments(DateTime date);
         public void CreateAppointments(List<Appointment> appts);
-        public void BookAppointment(int userId, int apptId);
+        public UserAppointment BookAppointment(Guid userId, int apptId);
     }
 }

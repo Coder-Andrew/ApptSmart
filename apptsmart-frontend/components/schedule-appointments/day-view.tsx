@@ -6,6 +6,9 @@ import styles from "./day-view.module.css"
 import { useEffect, useState } from "react"
 import { Appointment, RawAppointment } from "@/lib/types"
 import { toAppointment } from "@/utilities/helpers"
+import { useRouter } from "next/router"
+import ROUTES from "@/lib/routes"
+import { redirect } from "next/navigation"
 
 
 interface DayViewProps {
@@ -13,7 +16,11 @@ interface DayViewProps {
 }
 
 export function DayView({ date }: DayViewProps) {
+  // TODO: Make it so only future events are posted... maybe add another method for the whole calandar to grey out an appt date with no appts
+  // and make it so users can't click on past appointment times
   const [dayError, setDayError] = useState<string>('');
+  const [ bookError, setBookError ] = useState<string>('');
+
   const [timeSlots, setTimeSlots] = useState<Appointment[]>([]);
   const [ selectedAppt, setSelectedAppt ] = useState<number|null>(null);
 
@@ -52,10 +59,32 @@ export function DayView({ date }: DayViewProps) {
     setTimeSlots(dateData);
   }
 
+  const bookAppointment = async () => {
+    setBookError('');
+    const res = await fetch(`/api/backend/appointments/book`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        appointmentId: selectedAppt
+      })
+    })
+
+    if (!res.ok) {
+      setBookError('Booking failed... please try again later.');
+      return;
+    }
+
+    // TODO: Add a notification at the top of the screen
+    redirect(ROUTES.appointments);
+  }
+
 
   return (
     <div className={styles.dayView}>
       {dayError && <p className="text-error">{ dayError }</p>}
+      {bookError && <p className="text-error">{ bookError }</p>}
       <h2 className={styles.dayTitle}>{format(date, "MMMM d, yyyy")}</h2>
       <div className={styles.timeSlotsGrid}>
         {timeSlots.length !== 0 ? timeSlots.map((slot) => (
@@ -76,7 +105,7 @@ export function DayView({ date }: DayViewProps) {
       </div>
       {selectedAppt && (
         <div className={styles.bookButton}>
-          <button className={`button-primary cursor-pointer`}>Book</button>
+          <button className={`button-primary cursor-pointer`} onClick={() => bookAppointment()}>Book</button>
         </div>
       )}
     </div>

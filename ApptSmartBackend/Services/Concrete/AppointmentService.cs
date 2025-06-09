@@ -2,6 +2,7 @@
 using ApptSmartBackend.DTOs;
 using ApptSmartBackend.Models.AppModels;
 using ApptSmartBackend.Services.Abstract;
+using Microsoft.Identity.Client;
 
 namespace ApptSmartBackend.Services.Concrete
 {
@@ -33,6 +34,24 @@ namespace ApptSmartBackend.Services.Concrete
         public IEnumerable<Appointment> GetAvailableAppointments(DateTime date)
         {
             return _appointmentRepo.GetAvailableAppointments(date);
+        }
+
+        public UserAppointment BookAppointment(Guid userId, int apptId)
+        {
+            // TODO: Add error handling/checking to make sure appt isn't already taken/exists
+            var appt = _appointmentRepo.FindById(apptId);
+            if (appt.UserAppointment != null)
+            {
+                throw new Exception($"Appointment {apptId} already booked!");
+            }
+            var userAppt = new UserAppointment
+            {
+                UserInfoId = userId,
+                Appointment = appt,
+                BookedAt = DateTime.Now,
+            };
+            _userAppointmentsRepo.AddOrUpdateAsync(userAppt);
+            return userAppt;
         }
     }
 }

@@ -5,6 +5,7 @@ using ApptSmartBackend.Models.AppModels;
 using ApptSmartBackend.Services;
 using ApptSmartBackend.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
@@ -26,10 +27,6 @@ namespace ApptSmartBackend.Controllers
             _userHelper = userHelper;
         }
 
-        // TODO: Fix future and past appointments, needs eager loading, needs proper dtos
-        // !!!
-        // !!!
-        // !!!
         [HttpGet("futureAppointments")]
         public ActionResult<UserAppointmentDto> GetFutureAppointments()
         {
@@ -72,6 +69,27 @@ namespace ApptSmartBackend.Controllers
             return Ok(_appointmentService.GetAvailableAppointments(date)
                 .Select(a => a.ToDto())
                 .ToList());
+        }
+
+        [HttpPost("book")]
+        public ActionResult BookAppointment([FromBody] BookAppointmentDto bookAppointment)
+        {
+            // TODO: Better error handling. Look at repo.
+            try
+            {
+                ActionResult<Guid> userIdResponse = this.GetUserId(_userHelper);
+
+                if (userIdResponse.Result is UnauthorizedResult || userIdResponse.Result is NotFoundResult) return userIdResponse.Result;
+
+                var userAppt = _appointmentService.BookAppointment(userIdResponse.Value, bookAppointment.AppointmentId);
+
+                // TODO: Change to Created response (with uri to new userappt)
+                return Ok(userAppt.Id);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [Authorize(Roles = "Admin")]
