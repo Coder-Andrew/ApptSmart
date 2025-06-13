@@ -73,6 +73,18 @@ namespace ApptSmartBackend.Controllers
                 .ToList());
         }
 
+        [HttpGet("available/{month:int}")]
+        public ActionResult<List<DateTime>> GetDaysWithAvailableDays(int month)
+        {
+            if (month < 0 || month > 12)
+            {
+                return BadRequest("Invalid month");
+            }
+
+            return _appointmentService.GetAvailableDays(month).ToList();
+        }
+
+
         [HttpPost("book")]
         public ActionResult BookAppointment([FromBody] BookAppointmentDto bookAppointment)
         {

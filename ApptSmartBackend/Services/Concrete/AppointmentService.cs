@@ -53,5 +53,10 @@ namespace ApptSmartBackend.Services.Concrete
             await _userAppointmentsRepo.AddOrUpdateAsync(userAppt);
             return userAppt;
         }
+
+        public IEnumerable<DateTime> GetAvailableDays(int month)
+        {
+            return _appointmentRepo.GetAvailableDays(month).ToList();
+        }
     }
 }
