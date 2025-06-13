@@ -106,5 +106,13 @@ namespace ApptSmartBackend.DAL.Concrete
             Delete(FindById(id));
             return;
         }
+
+        public virtual void AddRange(IEnumerable<TEntity> entities)
+        {
+            if (entities == null) throw new ArgumentNullException(nameof(entities));
+
+            _context.AddRange(entities);
+            _context.SaveChanges();
+        }
     }
 }

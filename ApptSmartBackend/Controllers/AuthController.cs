@@ -6,9 +6,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
+using System.Text.Encodings.Web;
 
 namespace ApptSmartBackend.Controllers
 {
+    /// <summary>
+    /// Handles user login and token issuance.
+    /// </summary>
     [ApiController]
     [Route("api/auth")]
     public class AuthController : ControllerBase
@@ -21,6 +25,11 @@ namespace ApptSmartBackend.Controllers
             _authService = authService;
         }
 
+        /// <summary>
+        /// Registers a user
+        /// </summary>
+        /// <param name="userInfo">The credentials a user registers with.</param>
+        /// <returns></returns>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto userInfo)
         {
@@ -38,10 +47,15 @@ namespace ApptSmartBackend.Controllers
             return Ok(response.Message);
         }
 
+        /// <summary>
+        /// Handles user login and JWT issuance.
+        /// </summary>
+        /// <param name="userInfo">The user's login credentials</param>
+        /// <returns>JWT token cookie on success; Unauthorized on failure.</returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto userInfo)
         {
-            GenericResponse<string> response = await _authService.Login(userInfo);
+            GenericResponse<AuthResponseDto> response = await _authService.Login(userInfo);
 
             if (!response.Success)
             {
@@ -54,19 +68,34 @@ namespace ApptSmartBackend.Controllers
                 }
             }
 
-            CookieOptions cookieOptions = new CookieOptions
+            CookieOptions jwtCookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Secure = true, // CHANGE IN PRODUCTION 
-                SameSite = SameSiteMode.None, // CHANGE IN PRODUCTIONS
+                Secure = true, 
+                SameSite = SameSiteMode.None, 
                 Expires = DateTime.Now.AddMinutes(_jwtSettings.ExpiryMinutes)
             };
 
-            Response.Cookies.Append("AuthToken", response.Data, cookieOptions);
+            CookieOptions csrfCookieOptions = new CookieOptions
+            {
+                HttpOnly = false,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.Now.AddMinutes(_jwtSettings.ExpiryMinutes) // TODO: Change later, to something longer
+            };
 
+            Response.Cookies.Append("AuthToken", response.Data!.Jwt, jwtCookieOptions);
+            Response.Cookies.Append("XSRF-TOKEN", response.Data!.CsrfToken, csrfCookieOptions);
+
+            // Change later for third-party consumers
             return Ok(response.Message);
         }
 
+        /// <summary>
+        /// Handles logging out a user
+        /// </summary>
+        /// <returns>A 200 OK response with auth token deletion</returns>
+        /// <remarks>Will handle logging later.</remarks>
         [HttpGet("logout")]
         public async Task<IActionResult> Logout()
         {
@@ -84,6 +113,10 @@ namespace ApptSmartBackend.Controllers
             return Ok(new { success= true, data=claims });
         }
 
+        /// <summary>
+        /// Issues updated user info
+        /// </summary>
+        /// <returns>UserInfo containing user's information</returns>
         [HttpGet("me")]
         [Authorize]
         public async Task<IActionResult> Me()

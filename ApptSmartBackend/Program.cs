@@ -22,6 +22,7 @@ using ApptSmartBackend.SettingsObjects;
 using ApptSmartBackend.Utilities;
 using ApptSmartBackend.DAL.Abstract;
 using ApptSmartBackend.DAL.Concrete;
+using Microsoft.AspNetCore.Authentication;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,7 +43,7 @@ builder.Services
 
 string jwtSecret = jwtConfig["Secret"] ?? throw new KeyNotFoundException("Cannot find JWT Secret");
 
-// CorsSettings corsSettings = builder.Configuration.GetSection("Cors").Get<CorsSettings>() ?? throw new KeyNotFoundException("Cannot find CORS settings");
+CorsSettings corsSettings = builder.Configuration.GetSection("Cors").Get<CorsSettings>() ?? throw new KeyNotFoundException("Cannot find CORS settings");
 
 // Add services to the container
 builder.Services.AddControllers();
@@ -51,22 +52,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddLogging();
 
 
-// Configure CORS // CHANGE IN PRODUCTIONS
-//string corsPolicyName = "frontendCorsPolicy";
-
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy(corsPolicyName, policy =>
-//    {
-//        foreach (string site in corsSettings.AllowedSites)
-//        {
-//            policy.WithOrigins(site)
-//                .AllowAnyHeader()
-//                .AllowAnyMethod()
-//                .AllowCredentials();
-//        }
-//    });
-//});
+// Configure CORS // CHANGE IN PRODUCTION
+string corsPolicyName = "TrustedFrontendClients";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(corsPolicyName, policy =>
+    {
+        policy.WithOrigins(corsSettings.AllowedSites.ToArray())
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 
 // Add Identity with sql server
 builder.Services.AddDbContext<AuthDbContext>(options =>
@@ -126,6 +123,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
 builder.Services.AddScoped<IUserAppointmentRepository, UserAppointmentRepository>();
 builder.Services.AddScoped<IUserInfoRepositoryAsync, UserInfoRepositoryAsync>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IUserHelperService, UserHelperService>();
 builder.Services.AddScoped<IUserInfoRepositoryAsync, UserInfoRepositoryAsync>();
@@ -133,7 +131,6 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSingleton<JwtHelper>();
 
 var app = builder.Build();
-
 
 // Seed basic Identity roles
 using (var scope = app.Services.CreateScope())
@@ -153,8 +150,8 @@ if (app.Environment.IsDevelopment())
 
 
 //app.UseHttpsRedirection();
+app.UseCors(corsPolicyName);
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

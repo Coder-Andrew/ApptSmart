@@ -5,27 +5,18 @@ CREATE TABLE [UserInfo] (
 	[LastName] NVARCHAR(150)
 );
 
+CREATE TABLE [Appointments] (
+	[Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	[StartTime] DATETIME NOT NULL,
+	[EndTime] DATETIME NOT NULL,
+);
+
 CREATE TABLE [UserAppointments] (
 	[Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
 	[UserInfoId] UNIQUEIDENTIFIER NOT NULL,
-	[DateTime] DATETIME NOT NULL,
+	[AppointmentId] INT NOT NULL,
+	[BookedAt] DATETIME DEFAULT GETDATE(),
+	CONSTRAINT [FK_UserAppointments_UserInfo] FOREIGN KEY ([UserInfoId]) REFERENCES UserInfo ([Id]),
+	CONSTRAINT [FK_UserAppointments_Appointments] FOREIGN KEY ([AppointmentId]) REFERENCES Appointments ([Id]),
+	CONSTRAINT [UQ_UserAppointments_AppointmentId] UNIQUE ([AppointmentId])
 );
-
-CREATE TABLE [AvailableAppointments] (
-	[Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
-	[DateTime] DATETIME NOT NULL
-);
-
---CREATE TABLE [AppointmentSettings] (
---	[Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
---	[AppointmentStartTime] DATETIME NOT NULL,
---	[AppointmentEndTime] DATETIME NOT NULL,
-
---);
-
-ALTER TABLE [UserAppointments] 
-ADD CONSTRAINT [Fk UserAppointments UserInfoId]
-FOREIGN KEY ([UserInfoId])
-REFERENCES [UserInfo] ([Id])
-ON DELETE NO ACTION
-ON UPDATE NO ACTION;

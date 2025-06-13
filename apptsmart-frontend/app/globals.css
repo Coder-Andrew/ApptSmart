@@ -51,6 +51,18 @@ a {
     visibility: visible;
 }
 
+.footer-spacer {
+    height: 100vh;
+}
+
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
 /* Font Styles */
 .font-primary {
     font-family: var(--primary-font);

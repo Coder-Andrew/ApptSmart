@@ -1,14 +1,17 @@
 "use client"
 
 import AppointmentContainer from "@/components/UI/Appointments/AppointmentContainer/AppointmentContainer";
-import AppointmentItem, { AppointmentItemProps } from "@/components/UI/Appointments/AppointmentItem/AppointmentItem";
+import AppointmentItem from "@/components/UI/Appointments/AppointmentItem/AppointmentItem";
+import { Appointment, UserAppointmentProps } from "@/lib/types";
+import { fetchBackend, getCsrftoken } from "@/utilities/helpers";
 import { useEffect, useState } from "react";
 
 
+
 const AppointmentBox = () => {
-    const [ futureAppointments, setFutureApointments] = useState<AppointmentItemProps[]>([]);
-    const [ pastAppointments, setPastAppointments ] = useState<AppointmentItemProps[]>([]);
-    const [ upcomingAppointment, setUpcomingAppointment ] = useState<AppointmentItemProps[]>([]);
+    const [ futureAppointments, setFutureApointments] = useState<Appointment[]>([]);
+    const [ pastAppointments, setPastAppointments ] = useState<Appointment[]>([]);
+    const [ upcomingAppointment, setUpcomingAppointment ] = useState<Appointment[]>([]);
 
     useEffect(() => {
         getFutureAppointments();
@@ -16,8 +19,9 @@ const AppointmentBox = () => {
     }, []);
 
     const getFutureAppointments = async () => {
-        const response = await fetch("/api/appointments/futureAppointments", {
-            method: "GET"
+        const response = await fetchBackend("/appointments/futureAppointments", {
+            method: "GET",
+            credentials: "include"
         });
 
         if (!response.ok) {
@@ -25,22 +29,22 @@ const AppointmentBox = () => {
             return;
         }
 
-        const jsonResponse: AppointmentItemProps[] = await response.json();
-        
+        const jsonResponse: UserAppointmentProps[] = await response.json();
+        console.log(jsonResponse);
         const sortedAppointments = jsonResponse.sort((a, b) => {
-            const dateA = new Date(a.appointmentTime).getTime();
-            const dateB = new Date(b.appointmentTime).getTime();
+            const dateA = new Date(a.appointment.startTime).getTime();
+            const dateB = new Date(b.appointment.startTime).getTime();
             return dateA - dateB;
         })
 
         const nextAppointment = sortedAppointments[0];
 
-        setFutureApointments(jsonResponse);
-        setUpcomingAppointment([nextAppointment]);
+        setFutureApointments(jsonResponse.map((ua)=> ua.appointment));
+        setUpcomingAppointment([nextAppointment.appointment]);
     };
 
     const getPastAppointments = async () => {
-        const response = await fetch("/api/appointments/pastAppointments", {
+        const response = await fetchBackend("/appointments/pastAppointments", {
             method: "GET"
         });
 
@@ -49,10 +53,10 @@ const AppointmentBox = () => {
             return;
         }
 
-        const jsonResponse: AppointmentItemProps[] = await response.json();
-        console.log(jsonResponse);
+        const jsonResponse: UserAppointmentProps[] = await response.json();
+        //console.log(jsonResponse);
 
-        setPastAppointments(jsonResponse);
+        setPastAppointments(jsonResponse.map((ua)=> ua.appointment));
     }
     
     return (  

@@ -1,14 +1,22 @@
+import { Appointment } from "@/lib/types"
 import "./time-slot.css"
 
 interface TimeSlotProps {
-  time: string
-  isTaken: boolean
+  id: number
+  startTime: Date
+  endTime: Date
+  onSelect: () => void
+  isSelected: boolean
 }
 
-export function TimeSlot({ time, isTaken }: TimeSlotProps) {
+export function TimeSlot({id, startTime, endTime, onSelect, isSelected }: TimeSlotProps ) {
   return (
-    <button className={`time-slot ${isTaken ? "taken" : "available"}`} disabled={isTaken}>
-      {time}
+    <button
+      className={`time-slot ${isSelected ? 'selected' : ''}`}
+      onClick={onSelect}
+      data-id={id}
+    >
+      {`${startTime.toLocaleTimeString()} - ${endTime.toLocaleTimeString()}`}
     </button>
   )
 }

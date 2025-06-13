@@ -1,21 +1,14 @@
 "use client"
+import { Appointment } from "@/lib/types";
 
-export interface AppointmentItemProps {
-    id: number;
-    appointmentTime: string;
-}
-
-
-const AppointmentItem: React.FC<AppointmentItemProps> = ({id, appointmentTime: date}) => {
-    const dateObj = new Date(date);
-    // TODO: Add additional information, such as date, and time (converted to local time)
-    const apptDate = dateObj.getDate();
-    const apptTime = dateObj.getTime();
+const AppointmentItem: React.FC<Appointment> = ({startTime, endTime}) => {
+    const startTimeDate = new Date(startTime);
+    const endTimeDate = new Date(endTime);
+    //console.log(startTime, endTime);
 
     return (
         <div>
-            <p>{date}</p>
-            <p>{apptDate}</p>
+            <p>{ startTimeDate.toLocaleString() } - { endTimeDate.toLocaleString() }</p>
         </div>
     );
 }
