@@ -28,5 +28,12 @@ namespace ApptSmartBackend.DAL.Concrete
                 .OrderBy(date => date)
                 .ToList();
         }
+
+        public override Appointment? FindById(int id)
+        {
+            return _appointments
+                .Include(a => a.UserAppointment)
+                .FirstOrDefault(a => a.Id == id);
+        }
     }
 }

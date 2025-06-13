@@ -39,6 +39,16 @@ namespace ApptSmartBackend.Services.Concrete
         public async Task<GenericResponse<UserAppointment>> BookAppointment(Guid userId, int apptId)
         { 
             var appt = _appointmentRepo.FindById(apptId);
+            if (appt == null)
+            {
+                return new GenericResponse<UserAppointment>
+                {
+                    Data = default,
+                    Message = "Appointment not found",
+                    Success = false,
+                    StatusCode = GenericStatusCode.AppointmentNotFound
+                };
+            }
             if (appt.UserAppointment != null)
             {
                 return new GenericResponse<UserAppointment>

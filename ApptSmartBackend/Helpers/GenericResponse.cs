@@ -14,6 +14,7 @@
         FailedToGetUserInfoId,
         BookPastAppointment,
         AppointmentAlreadyBooked,
+        AppointmentNotFound,
         AppointmentBooked
     }
     public class GenericResponse<T>
