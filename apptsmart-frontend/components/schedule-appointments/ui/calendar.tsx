@@ -32,6 +32,8 @@ export function Calendar({ mode, selected, onSelect, className = "" }: CalendarP
   const days = eachDayOfInterval({ start: monthStart, end: monthEnd })
 
   const today = new Date();
+  today.setHours(0,0);
+  today.setMinutes(-1);
 
   // Get day names for the header
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]

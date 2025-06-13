@@ -11,15 +11,19 @@
         UserCreated,
         FailedToAddRole,
         FailedToGetUserAspNetClaim,
-        FailedToGetUserInfoId
+        FailedToGetUserInfoId,
+        BookPastAppointment,
+        AppointmentAlreadyBooked,
+        AppointmentBooked
     }
     public class GenericResponse<T>
     {
         public T? Data { get; set; }
         public bool Success { get; set; }
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
         public GenericStatusCode? StatusCode { get; set; }
 
+        public GenericResponse() { }
         public GenericResponse(T? data, bool success, string message, GenericStatusCode? statusCode = null)
         {
             Data = data;

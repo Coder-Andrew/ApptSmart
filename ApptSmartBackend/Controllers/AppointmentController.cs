@@ -86,19 +86,22 @@ namespace ApptSmartBackend.Controllers
 
 
         [HttpPost("book")]
-        public ActionResult BookAppointment([FromBody] BookAppointmentDto bookAppointment)
+        public async Task<ActionResult> BookAppointment([FromBody] BookAppointmentDto bookAppointment)
         {
-            // TODO: Better error handling. Look at repo.
             try
             {
                 ActionResult<Guid> userIdResponse = this.GetUserId(_userHelper);
 
                 if (userIdResponse.Result is UnauthorizedResult || userIdResponse.Result is NotFoundResult) return userIdResponse.Result;
 
-                var userAppt = _appointmentService.BookAppointment(userIdResponse.Value, bookAppointment.AppointmentId);
+                var response = await _appointmentService.BookAppointment(userIdResponse.Value, bookAppointment.AppointmentId);
 
-                // TODO: Change to Created response (with uri to new userappt)
-                return Ok(userAppt.Id);
+                if (!response.Success)
+                {
+                    return BadRequest(response.Message);
+                }
+                               
+                return Ok(response.Data?.Id);
             }
             catch (Exception ex)
             {
