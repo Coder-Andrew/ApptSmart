@@ -1,5 +1,6 @@
 "use client"
 
+import { fetchBackend } from "@/utilities/helpers";
 import { LoginError, LoginErrorCode } from "@/utilities/loginError";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -26,9 +27,8 @@ export const UserProvider = ({ children } : { children: React.ReactNode }) => {
     const fetchUser = async () => {
         try {
             setAuthReady(false);
-            const response = await fetch("/api/backend/auth/me",{
+            const response = await fetchBackend("/auth/me",{
                 method: "GET",
-                credentials: "include"
             });
 
             if (!response.ok) {
@@ -46,9 +46,8 @@ export const UserProvider = ({ children } : { children: React.ReactNode }) => {
     };
 
     const logout = async () => {
-        const response = await fetch("/api/backend/auth/logout",{
+        const response = await fetchBackend("/auth/logout",{
             method: "GET",
-            credentials: "include"
         });
 
         setUser(null);
@@ -56,11 +55,10 @@ export const UserProvider = ({ children } : { children: React.ReactNode }) => {
     };
 
     const login = async (email: string, password: string) => {
-        const response = await fetch("/api/backend/auth/login", {
+        const response = await fetchBackend("/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
-            credentials: "include"
         });
 
         if (!response.ok) {

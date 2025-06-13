@@ -61,14 +61,14 @@ namespace ApptSmartBackend.Services.Concrete
             );
         }
 
-        public async Task<GenericResponse<string>> Login(LoginDto loginInfo)
+        public async Task<GenericResponse<AuthResponseDto>> Login(LoginDto loginInfo)
         {
             AuthUser? user = await _userManager.FindByEmailAsync(loginInfo.Email);
 
             if (user == null || ! await _userManager.CheckPasswordAsync(user, loginInfo.Password))
             {
-                return new GenericResponse<string>(
-                    data: string.Empty,
+                return new GenericResponse<AuthResponseDto>(
+                    data: new AuthResponseDto(),
                     success: false,
                     message: "Invalid credentials",
                     statusCode: GenericStatusCode.InvalidCredentials
@@ -77,8 +77,12 @@ namespace ApptSmartBackend.Services.Concrete
 
             var userRoles = await _userManager.GetRolesAsync(user);
 
-            return new GenericResponse<string>(
-                data: _jwtHelper.GenerateJwt(user, userRoles),
+            return new GenericResponse<AuthResponseDto>(
+                data: new AuthResponseDto
+                {
+                    Jwt = _jwtHelper.GenerateJwt(user, userRoles),
+                    CsrfToken = _jwtHelper.GenerateCsrf(),
+                },
                 success: true,
                 message: "Login successful",
                 statusCode: GenericStatusCode.Success
@@ -87,6 +91,7 @@ namespace ApptSmartBackend.Services.Concrete
 
         public Task<GenericResponse<string>> Logout()
         {
+            // Might be a good place for logging
             throw new NotImplementedException();
         }
 

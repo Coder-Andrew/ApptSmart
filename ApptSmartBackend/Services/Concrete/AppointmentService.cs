@@ -38,7 +38,7 @@ namespace ApptSmartBackend.Services.Concrete
 
         public UserAppointment BookAppointment(Guid userId, int apptId)
         {
-            // TODO: Add error handling/checking to make sure appt isn't already taken/exists
+            // TODO: Add error handling/checking to make sure appt isn't already taken/exists          
             var appt = _appointmentRepo.FindById(apptId);
             if (appt.UserAppointment != null)
             {

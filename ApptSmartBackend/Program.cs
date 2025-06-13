@@ -22,6 +22,7 @@ using ApptSmartBackend.SettingsObjects;
 using ApptSmartBackend.Utilities;
 using ApptSmartBackend.DAL.Abstract;
 using ApptSmartBackend.DAL.Concrete;
+using Microsoft.AspNetCore.Authentication;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -130,7 +131,6 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddSingleton<JwtHelper>();
 
 var app = builder.Build();
-
 
 // Seed basic Identity roles
 using (var scope = app.Services.CreateScope())

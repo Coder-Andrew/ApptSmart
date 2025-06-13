@@ -4,6 +4,7 @@ using ApptSmartBackend.Extensions;
 using ApptSmartBackend.Models.AppModels;
 using ApptSmartBackend.Services;
 using ApptSmartBackend.Services.Abstract;
+using ApptSmartBackend.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,7 @@ namespace ApptSmartBackend.Controllers
         }
 
         [HttpGet("futureAppointments")]
+        [ValidateCsrfToken]
         public ActionResult<UserAppointmentDto> GetFutureAppointments()
         {
             ActionResult<Guid> userIdResponse = this.GetUserId(_userHelper);

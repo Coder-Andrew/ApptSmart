@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ApptSmartBackend.SettingsObjects;
 using Microsoft.Extensions.Options;
+using System.Security.Cryptography;
 
 namespace ApptSmartBackend.Helpers
 {
@@ -44,6 +45,17 @@ namespace ApptSmartBackend.Helpers
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string GenerateCsrf()
+        {
+            var tokenBytes = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(tokenBytes);
+            return Convert.ToBase64String(tokenBytes)
+                .TrimEnd('=')
+                .Replace('+', '-')
+                .Replace('/','+');
         }
     }
 }
