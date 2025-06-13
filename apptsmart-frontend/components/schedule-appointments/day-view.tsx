@@ -5,7 +5,7 @@ import { TimeSlot } from "./time-slot"
 import styles from "./day-view.module.css"
 import { useEffect, useState } from "react"
 import { Appointment, RawAppointment } from "@/lib/types"
-import { toAppointment } from "@/utilities/helpers"
+import { fetchBackend, toAppointment } from "@/utilities/helpers"
 import { useRouter } from "next/router"
 import ROUTES from "@/lib/routes"
 import { redirect } from "next/navigation"
@@ -37,7 +37,7 @@ export function DayView({ date }: DayViewProps) {
     const params = new URLSearchParams({
       date: date.toISOString().split('T')[0]
     });
-    const res = await fetch(`/api/backend/appointments/available?${params}`, {
+    const res = await fetchBackend(`/appointments/available?${params}`, {
       method: "GET"
     });
 
@@ -61,7 +61,7 @@ export function DayView({ date }: DayViewProps) {
 
   const bookAppointment = async () => {
     setBookError('');
-    const res = await fetch(`/api/backend/appointments/book`, {
+    const res = await fetchBackend(`/appointments/book`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',

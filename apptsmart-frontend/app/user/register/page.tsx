@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/stores/UserContext";
+import { fetchBackend } from "@/utilities/helpers";
 
 
 const Register = () => {
@@ -20,7 +21,7 @@ const Register = () => {
 
         const body = JSON.stringify({ firstName, lastName, email, password });
 
-        const response = await fetch("/api/backend/auth/register", {
+        const response = await fetchBackend("/auth/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: body

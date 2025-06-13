@@ -3,6 +3,7 @@ import ApptViewer from "@/components/admin/appointment-generator/ApptViewer";
 import FormFields from "@/components/admin/appointment-generator/FormFields";
 import TimeSelect from "@/components/admin/appointment-generator/TimeSelect";
 import { AppointmentMap } from "@/lib/types"
+import { fetchBackend } from "@/utilities/helpers";
 import { useEffect, useState } from "react";
 
 const AdminPage = () => {
@@ -43,7 +44,7 @@ const AdminPage = () => {
         const payLoad = formatApptsForBackend(appointments);
         if (payLoad.length <= 0) return;
 
-        const res = await fetch("/api/backend/appointments/create", {
+        const res = await fetchBackend("/appointments/create", {
             headers: {
                 'Content-Type': 'application/json'
             },

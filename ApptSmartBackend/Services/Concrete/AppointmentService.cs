@@ -36,7 +36,7 @@ namespace ApptSmartBackend.Services.Concrete
             return _appointmentRepo.GetAvailableAppointments(date);
         }
 
-        public UserAppointment BookAppointment(Guid userId, int apptId)
+        public async Task<UserAppointment> BookAppointment(Guid userId, int apptId)
         {
             // TODO: Add error handling/checking to make sure appt isn't already taken/exists          
             var appt = _appointmentRepo.FindById(apptId);
@@ -50,7 +50,7 @@ namespace ApptSmartBackend.Services.Concrete
                 Appointment = appt,
                 BookedAt = DateTime.Now,
             };
-            _userAppointmentsRepo.AddOrUpdateAsync(userAppt);
+            await _userAppointmentsRepo.AddOrUpdateAsync(userAppt);
             return userAppt;
         }
     }
