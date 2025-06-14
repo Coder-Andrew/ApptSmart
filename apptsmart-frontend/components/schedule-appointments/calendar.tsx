@@ -7,6 +7,7 @@ import "./calendar.css"
 
 export function Calendar() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
+  console.log(selectedDate);
 
   return (
     <div className="calendar-container">

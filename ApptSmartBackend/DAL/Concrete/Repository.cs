@@ -39,7 +39,7 @@ namespace ApptSmartBackend.DAL.Concrete
         }
 
         // Find by ID assuming it's the PK and is an int
-        public virtual TEntity FindById(int id)
+        public virtual TEntity? FindById(int id)
         {
             TEntity? entity = _dbSet.Find(id);
 #pragma warning disable CS8603 // Possible null reference return.

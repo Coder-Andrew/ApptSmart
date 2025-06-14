@@ -24,7 +24,6 @@ export function DayView({ date }: DayViewProps) {
   const [timeSlots, setTimeSlots] = useState<Appointment[]>([]);
   const [ selectedAppt, setSelectedAppt ] = useState<number|null>(null);
 
-  console.log(selectedAppt);
 
   useEffect(() =>{
     getAvailableAppointments();
@@ -32,11 +31,12 @@ export function DayView({ date }: DayViewProps) {
   },[date]);
 
   const getAvailableAppointments = async () => {
-    // TODO: Left off trying to get response from backend
     setDayError('');
+    // TODO: Need to figure out local/iso conversion.
     const params = new URLSearchParams({
-      date: date.toISOString().split('T')[0]
+      date: date.toLocaleString()
     });
+
     const res = await fetchBackend(`/appointments/available?${params}`, {
       method: "GET"
     });
@@ -46,7 +46,6 @@ export function DayView({ date }: DayViewProps) {
       setDayError('An error has occured, try again later.');
       return;
     }
-    console.log(res)
     const data = await res.json();
 
     const dateData = data

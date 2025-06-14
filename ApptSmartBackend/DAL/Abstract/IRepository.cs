@@ -17,7 +17,7 @@ namespace ApptSmartBackend.DAL.Abstract
         /// </summary>
         /// <param name="id">The PK of the entity to find</param>
         /// <returns>The entity or null if not found</returns>
-        TEntity FindById(int id);
+        TEntity? FindById(int id);
 
         /// <summary>
         /// Check if the entity with this integer PK exists in the table

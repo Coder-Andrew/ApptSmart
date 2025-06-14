@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   format,
   startOfMonth,
@@ -12,6 +12,8 @@ import {
   subMonths,
 } from "date-fns"
 import "./calendar-ui.css"
+import { fetchBackend } from "@/utilities/helpers"
+import { Appointment } from "@/lib/types"
 
 interface CalendarProps {
   mode: "single"
@@ -23,9 +25,15 @@ interface CalendarProps {
 export function Calendar({ mode, selected, onSelect, className = "" }: CalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date())
 
+  const [ availableDays, setAvailableDays ] = useState<Set<string>>();
+
   const monthStart = startOfMonth(currentMonth)
   const monthEnd = endOfMonth(currentMonth)
   const days = eachDayOfInterval({ start: monthStart, end: monthEnd })
+
+  const today = new Date();
+  today.setHours(0,0);
+  today.setMinutes(-1);
 
   // Get day names for the header
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -49,6 +57,21 @@ export function Calendar({ mode, selected, onSelect, className = "" }: CalendarP
       onSelect(date)
     }
   }
+
+  const getAvailableDays = async () => {
+    const res = await fetchBackend(`/appointments/available/${currentMonth.getMonth() + 1}`);
+
+    if (!res.ok) {
+
+      return;
+    }
+    const json: Array<string> = await res.json();
+    setAvailableDays(new Set(json.map(d => new Date(d).getDate().toString())));
+  }
+  
+  useEffect(() => {
+    getAvailableDays();
+  }, [currentMonth])
 
   return (
     <div className={`calendar-ui ${className}`}>
@@ -74,15 +97,16 @@ export function Calendar({ mode, selected, onSelect, className = "" }: CalendarP
         ))}
 
         {days.map((day) => (
-          <button
-            key={day.toString()}
-            className={`day ${!isSameMonth(day, currentMonth) ? "outside-month" : ""} ${
-              selected && isSameDay(day, selected) ? "selected" : ""
-            }`}
-            onClick={() => handleSelectDate(day)}
-          >
-            {format(day, "d")}
-          </button>
+          <div className={`dayDiv no-select ${day < today ? "unavailable" : ""}`} key={day.toString()}>
+            <button              
+              className={`day ${!isSameMonth(day, currentMonth) ? "outside-month" : ""} ${selected && isSameDay(day, selected) ? "selected" : ""}`}
+              onClick={() => day > today ? handleSelectDate(day) : ''}
+            >
+              {format(day, "d")}
+              
+            </button>
+            <span>{availableDays?.has(format(day, "d")) ? '•' : '\u00a0'}</span>
+          </div>
         ))}
       </div>
     </div>

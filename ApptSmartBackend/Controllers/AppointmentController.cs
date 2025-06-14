@@ -73,20 +73,35 @@ namespace ApptSmartBackend.Controllers
                 .ToList());
         }
 
-        [HttpPost("book")]
-        public ActionResult BookAppointment([FromBody] BookAppointmentDto bookAppointment)
+        [HttpGet("available/{month:int}")]
+        public ActionResult<List<DateTime>> GetDaysWithAvailableDays(int month)
         {
-            // TODO: Better error handling. Look at repo.
+            if (month < 0 || month > 12)
+            {
+                return BadRequest("Invalid month");
+            }
+
+            return _appointmentService.GetAvailableDays(month).ToList();
+        }
+
+
+        [HttpPost("book")]
+        public async Task<ActionResult> BookAppointment([FromBody] BookAppointmentDto bookAppointment)
+        {
             try
             {
                 ActionResult<Guid> userIdResponse = this.GetUserId(_userHelper);
 
                 if (userIdResponse.Result is UnauthorizedResult || userIdResponse.Result is NotFoundResult) return userIdResponse.Result;
 
-                var userAppt = _appointmentService.BookAppointment(userIdResponse.Value, bookAppointment.AppointmentId);
+                var response = await _appointmentService.BookAppointment(userIdResponse.Value, bookAppointment.AppointmentId);
 
-                // TODO: Change to Created response (with uri to new userappt)
-                return Ok(userAppt.Id);
+                if (!response.Success)
+                {
+                    return BadRequest(response.Message);
+                }
+                               
+                return Ok(response.Data?.Id);
             }
             catch (Exception ex)
             {

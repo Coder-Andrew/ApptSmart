@@ -18,5 +18,22 @@ namespace ApptSmartBackend.DAL.Concrete
             return _appointments
                 .Where(a => a.StartTime.Date == date.Date && a.UserAppointment == null);
         }
+
+        public IEnumerable<DateTime> GetAvailableDays(int month)
+        {
+            return _appointments
+                .Where(a => a.UserAppointment == null && a.StartTime.Month == month)
+                .GroupBy(a => a.StartTime.Date)
+                .Select(a => a.Key)
+                .OrderBy(date => date)
+                .ToList();
+        }
+
+        public override Appointment? FindById(int id)
+        {
+            return _appointments
+                .Include(a => a.UserAppointment)
+                .FirstOrDefault(a => a.Id == id);
+        }
     }
 }

@@ -36,14 +36,40 @@ namespace ApptSmartBackend.Services.Concrete
             return _appointmentRepo.GetAvailableAppointments(date);
         }
 
-        public async Task<UserAppointment> BookAppointment(Guid userId, int apptId)
-        {
-            // TODO: Add error handling/checking to make sure appt isn't already taken/exists          
+        public async Task<GenericResponse<UserAppointment>> BookAppointment(Guid userId, int apptId)
+        { 
             var appt = _appointmentRepo.FindById(apptId);
+            if (appt == null)
+            {
+                return new GenericResponse<UserAppointment>
+                {
+                    Data = default,
+                    Message = "Appointment not found",
+                    Success = false,
+                    StatusCode = GenericStatusCode.AppointmentNotFound
+                };
+            }
             if (appt.UserAppointment != null)
             {
-                throw new Exception($"Appointment {apptId} already booked!");
+                return new GenericResponse<UserAppointment>
+                {
+                    Data = default,
+                    Message = "Appointment already booked",
+                    Success = false,
+                    StatusCode = GenericStatusCode.AppointmentAlreadyBooked
+                };
             }
+            if (appt.StartTime < DateTime.Now)
+            {
+                return new GenericResponse<UserAppointment>
+                {
+                    Data = default,
+                    Message = "Unable to book past appointments",
+                    Success = false,
+                    StatusCode = GenericStatusCode.BookPastAppointment
+                };
+            }
+
             var userAppt = new UserAppointment
             {
                 UserInfoId = userId,
@@ -51,7 +77,18 @@ namespace ApptSmartBackend.Services.Concrete
                 BookedAt = DateTime.Now,
             };
             await _userAppointmentsRepo.AddOrUpdateAsync(userAppt);
-            return userAppt;
+            return new GenericResponse<UserAppointment>
+            {
+                Data = userAppt,
+                Success = true,
+                Message = $"Booked appointment {appt.Id}, under userappt {userAppt.Id}",
+                StatusCode = GenericStatusCode.AppointmentBooked
+            };
+        }
+
+        public IEnumerable<DateTime> GetAvailableDays(int month)
+        {
+            return _appointmentRepo.GetAvailableDays(month).ToList();
         }
     }
 }
