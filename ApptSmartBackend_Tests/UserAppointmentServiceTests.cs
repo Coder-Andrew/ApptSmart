@@ -85,7 +85,8 @@ public class UserAppointmentServiceTests : TestDbHelper
         // Arrange
         using AppDbContext context = CreateContext();
         var userRepo = new UserAppointmentRepository(context);
-        var appService = new AppointmentService(userRepo);
+        var apptRepo = new AppointmentRepository(context);
+        var appService = new AppointmentService(userRepo, apptRepo);
 
         // Act
         var futureAppointments = appService.GetFutureAppointments(userId);
@@ -105,7 +106,8 @@ public class UserAppointmentServiceTests : TestDbHelper
         // Arrange
         using AppDbContext context = CreateContext();
         var userRepo = new UserAppointmentRepository(context);
-        var appService = new AppointmentService(userRepo);
+        var apptRepo = new AppointmentRepository(context);
+        var appService = new AppointmentService(userRepo, apptRepo);
 
         // Act
         var futureAppointments = appService.GetPastAppointments(userId);
@@ -119,6 +121,6 @@ public class UserAppointmentServiceTests : TestDbHelper
         }
     }
 
-    [TestCaseSource(nameof(AvailableAppointmentCases))]
-    public async Task GetAvailableAppointments(Guid userId, List<int> expectedAppointmentIds)
+    //[TestCaseSource(nameof(AvailableAppointmentCases))]
+    //public async Task GetAvailableAppointments(Guid userId, List<int> expectedAppointmentIds)
 }

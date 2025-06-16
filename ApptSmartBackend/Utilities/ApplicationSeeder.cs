@@ -12,7 +12,7 @@ namespace ApptSmartBackend.Utilities
     {
         public static async Task SeedIdentityRolesAsync(RoleManager<IdentityRole> roleManager)
         {
-            string[] roleNames = { "Admin", "User", "Manager" };
+            string[] roleNames = { "Admin", "User", "CompanyOwner" };
 
             foreach (var roleName in roleNames)
             {
