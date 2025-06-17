@@ -1,4 +1,4 @@
-﻿namespace ApptSmartBackend.Helpers
+﻿namespace ApptSmartBackend.Utilities
 {
     public static class ErrorMessages
     {

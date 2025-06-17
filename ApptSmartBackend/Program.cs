@@ -129,8 +129,11 @@ builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IUserHelperService, UserHelperService>();
 builder.Services.AddScoped<IUserInfoRepositoryAsync, UserInfoRepositoryAsync>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserAppointmentService, UserAppointmentService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
+
 builder.Services.AddSingleton<JwtHelper>();
 
 var app = builder.Build();
