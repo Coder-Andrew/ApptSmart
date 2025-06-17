@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace ApptSmartBackend.Utilities
+namespace ApptSmartBackend.Helpers
 {
     /// <summary>
     /// A Slugify helper class designed to convert string into url-friendly representations.

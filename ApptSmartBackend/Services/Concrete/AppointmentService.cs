@@ -16,24 +16,14 @@ namespace ApptSmartBackend.Services.Concrete
             _appointmentRepo = appointmentRepo;
         }
 
-        public IEnumerable<UserAppointment> GetFutureAppointments(Guid userId)
-        {
-            return _userAppointmentsRepo.GetFutureAppointments(userId);
-        }
-
-        public IEnumerable<UserAppointment> GetPastAppointments(Guid userId)
-        {
-            return _userAppointmentsRepo.GetPastAppointments(userId);
-        }
-
         public void CreateAppointments(List<Appointment> appts)
         {
             _appointmentRepo.AddRange(appts);
         }
 
-        public IEnumerable<Appointment> GetAvailableAppointments(DateTime date)
+        public IEnumerable<Appointment> GetAvailableAppointments(string companySlug, DateTime date)
         {
-            return _appointmentRepo.GetAvailableAppointments(date);
+            return _appointmentRepo.GetAvailableAppointments(companySlug, date);
         }
 
         public async Task<GenericResponse<UserAppointment>> BookAppointment(Guid userId, int apptId)
@@ -86,9 +76,9 @@ namespace ApptSmartBackend.Services.Concrete
             };
         }
 
-        public IEnumerable<DateTime> GetAvailableDays(int month)
+        public IEnumerable<DateTime> GetAvailableDays(string companySlug, int month)
         {
-            return _appointmentRepo.GetAvailableDays(month).ToList();
+            return _appointmentRepo.GetAvailableDays(companySlug, month);
         }
     }
 }
