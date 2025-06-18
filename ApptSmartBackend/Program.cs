@@ -131,6 +131,7 @@ builder.Services.AddScoped<IUserInfoRepositoryAsync, UserInfoRepositoryAsync>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICompanyOwnerService, CompanyOwnerService>();
 builder.Services.AddScoped<IUserAppointmentService, UserAppointmentService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 

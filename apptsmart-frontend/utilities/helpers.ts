@@ -1,4 +1,4 @@
-import { Appointment, RawAppointment } from "@/lib/types"
+import { Appointment, CompanyInformation, RawAppointment } from "@/lib/types"
 
 export function toAppointment({id, startTime, endTime}: RawAppointment): Appointment {
     const start = new Date(startTime);

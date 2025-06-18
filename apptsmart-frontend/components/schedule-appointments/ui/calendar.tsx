@@ -20,9 +20,10 @@ interface CalendarProps {
   selected?: Date
   onSelect?: (date: Date | undefined) => void
   className?: string
+  companySlug: string
 }
 
-export function Calendar({ mode, selected, onSelect, className = "" }: CalendarProps) {
+export function Calendar({companySlug, mode, selected, onSelect, className = "" }: CalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date())
 
   const [ availableDays, setAvailableDays ] = useState<Set<string>>();
@@ -59,7 +60,7 @@ export function Calendar({ mode, selected, onSelect, className = "" }: CalendarP
   }
 
   const getAvailableDays = async () => {
-    const res = await fetchBackend(`/appointments/available/${currentMonth.getMonth() + 1}`);
+    const res = await fetchBackend(`${companySlug}/appointments/available/${currentMonth.getMonth() + 1}`);
 
     if (!res.ok) {
 

@@ -13,9 +13,10 @@ import { redirect } from "next/navigation"
 
 interface DayViewProps {
   date: Date
+  companySlug: string
 }
 
-export function DayView({ date }: DayViewProps) {
+export function DayView({ companySlug, date }: DayViewProps) {
   // TODO: Make it so only future events are posted... maybe add another method for the whole calandar to grey out an appt date with no appts
   // and make it so users can't click on past appointment times
   const [dayError, setDayError] = useState<string>('');
@@ -37,7 +38,7 @@ export function DayView({ date }: DayViewProps) {
       date: date.toLocaleString()
     });
 
-    const res = await fetchBackend(`/appointments/available?${params}`, {
+    const res = await fetchBackend(`${companySlug}/appointments/available?${params}`, {
       method: "GET"
     });
 
@@ -60,7 +61,7 @@ export function DayView({ date }: DayViewProps) {
 
   const bookAppointment = async () => {
     setBookError('');
-    const res = await fetchBackend(`/appointments/book`, {
+    const res = await fetchBackend(`${companySlug}/appointments/book`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json',

@@ -12,5 +12,11 @@ export interface UserAppointmentProps {
     bookedAt: Date,
     appointment: Appointment;
 }
+export interface CompanyInformation {
+    companyName: string,
+    companyDescription: string
+}
+
+
 export type AdminAppointment = { start: Date; end: Date, active: boolean }; // TODO: Could convert logic in appt creation to {appt: Appointment, active: boolean}
 export type AppointmentMap = Record<string, AdminAppointment[]>;

@@ -10,15 +10,40 @@ namespace ApptSmartBackend.Services.Concrete
     {
         private readonly IUserAppointmentRepository _userAppointmentsRepo;
         private readonly IAppointmentRepository _appointmentRepo;
-        public AppointmentService(IUserAppointmentRepository userAppointmentsRepo, IAppointmentRepository appointmentRepo)
+        private readonly ICompanyRepository _companyRepository;
+        public AppointmentService(IUserAppointmentRepository userAppointmentsRepo, IAppointmentRepository appointmentRepo, ICompanyRepository companyRepository)
         {
             _userAppointmentsRepo = userAppointmentsRepo;
             _appointmentRepo = appointmentRepo;
+            _companyRepository = companyRepository;
         }
 
-        public void CreateAppointments(List<Appointment> appts)
+        public async Task<GenericResponse<int>> CreateAppointments(string companySlug, List<Appointment> appts)
         {
+            var company = await _companyRepository.GetBySlugAsync(companySlug);
+            if (company == null)
+            {
+                return new GenericResponse<int>
+                {
+                    Data = 0,
+                    Success = false,
+                    StatusCode = GenericStatusCode.CompanyNotFound
+                };
+            }
+
+            foreach (var appt in appts)
+            {
+                appt.CompanyId = company.Id;
+            }
+
             _appointmentRepo.AddRange(appts);
+
+            return new GenericResponse<int>
+            {
+                Data = appts.Count,
+                Success = true,
+                StatusCode = GenericStatusCode.AppointmentsCreated
+            };
         }
 
         public IEnumerable<Appointment> GetAvailableAppointments(string companySlug, DateTime date)

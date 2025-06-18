@@ -32,7 +32,7 @@ namespace ApptSmartBackend.Controllers
         public ActionResult<List<AppointmentDto>> GetAvailableAppointments(string companySlug, [FromQuery] DateTime date)
         {
             if (date == default)
-            {                
+            {
                 return BadRequest("Invalid date format");
             }
 
@@ -72,30 +72,8 @@ namespace ApptSmartBackend.Controllers
                 {
                     return BadRequest(response.Message);
                 }
-                               
+
                 return Ok(response.Data?.Id);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpPost("create")]
-        public ActionResult CreateAppointments([FromBody] List<CreateAppointmentDto> appointments)
-        {
-            try
-            {
-                List<Appointment> appts = appointments.Select(a => new Appointment
-                {
-                    StartTime = a.StartTime,
-                    EndTime = a.EndTime
-                }).ToList();
-
-                _appointmentService.CreateAppointments(appts);
-
-                return Created();
             }
             catch (Exception ex)
             {
