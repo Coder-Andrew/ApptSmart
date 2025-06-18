@@ -97,8 +97,8 @@ namespace ApptSmartBackend.Utilities
 
             var johnDoe = new AuthUser
             {
-                Email = "jd@example.com",
-                UserName = "jd@example.com",
+                Email = "JohnDoe@example.com",
+                UserName = "JohnDoe@example.com",
             };
 
             await userManager.CreateAsync(johnDoe, seedPassword);

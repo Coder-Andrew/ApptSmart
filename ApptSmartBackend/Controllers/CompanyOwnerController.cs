@@ -10,7 +10,7 @@ namespace ApptSmartBackend.Controllers
 {
     [Authorize]
     [Authorize(Roles = "CompanyOwner")]
-    [Route("api/{companySlug}/owner")]
+    [Route("api/companies/{companySlug}/owner")]
     public class CompanyOwnerController : ControllerBase
     {
         private readonly IAppointmentService _appointmentService;
@@ -33,8 +33,8 @@ namespace ApptSmartBackend.Controllers
             _logger = logger;
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateAppointments(string companySlug, List<AppointmentDto> appointments)
+        [HttpPost("appointments")]
+        public async Task<IActionResult> CreateAppointments(string companySlug, [FromBody] List<CreateAppointmentDto> appointments)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace ApptSmartBackend.Controllers
                     })
                     .ToList();
 
-                var response = await _appointmentService.CreateAppointments(companySlug, appts);
+                var response = _appointmentService.CreateAppointments(appts);
                 if (!response.Success) return BadRequest(response.Message);
 
                 return Created();

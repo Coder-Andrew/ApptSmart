@@ -17,7 +17,10 @@
         AppointmentNotFound,
         AppointmentBooked,
         CompanyNotFound,
-        AppointmentsCreated
+        AppointmentsCreated,
+        DuplicateCompanyId,
+        DuplicateCompanySlug,
+        CompanyCreated
     }
     public class GenericResponse<T>
     {

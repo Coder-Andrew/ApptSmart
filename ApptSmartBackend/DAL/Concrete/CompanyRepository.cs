@@ -13,6 +13,12 @@ namespace ApptSmartBackend.DAL.Concrete
             _companies = ctx.Companies;
         }
 
+        public async Task<Company?> CreateCompanyAsync(Company company)
+        {
+            await _companies.AddAsync(company);
+            return company;
+        }
+
         public async Task<bool> ExistsAsync(string companySlug)
         {
             return await _companies

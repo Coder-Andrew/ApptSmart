@@ -18,26 +18,9 @@ namespace ApptSmartBackend.Services.Concrete
             _companyRepository = companyRepository;
         }
 
-        public async Task<GenericResponse<int>> CreateAppointments(string companySlug, List<Appointment> appts)
+        public GenericResponse<int> CreateAppointments(List<Appointment> appts)
         {
-            var company = await _companyRepository.GetBySlugAsync(companySlug);
-            if (company == null)
-            {
-                return new GenericResponse<int>
-                {
-                    Data = 0,
-                    Success = false,
-                    StatusCode = GenericStatusCode.CompanyNotFound
-                };
-            }
-
-            foreach (var appt in appts)
-            {
-                appt.CompanyId = company.Id;
-            }
-
-            _appointmentRepo.AddRange(appts);
-
+            _appointmentRepo.AddRange(appts); 
             return new GenericResponse<int>
             {
                 Data = appts.Count,

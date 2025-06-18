@@ -52,3 +52,13 @@ export function fetchBackend(input: string, init?: RequestInit): Promise<Respons
         credentials: 'include'
     });
 }
+
+export function slugify(input: string): string {
+    if (!input) return "";
+    let cpy = input;
+    cpy = cpy.toLowerCase();
+    cpy = cpy.replaceAll(/[^a-z0-9\s-]/g, "");
+    cpy = cpy.replaceAll(/\s+/g, "-").trim();
+    cpy = cpy.replaceAll(/-+/g, "-");
+    return cpy;
+}

@@ -1,17 +1,22 @@
 "use client"
 import ApptViewer from "@/components/admin/appointment-generator/ApptViewer";
 import FormFields from "@/components/admin/appointment-generator/FormFields";
-import TimeSelect from "@/components/admin/appointment-generator/TimeSelect";
 import { AppointmentMap } from "@/lib/types"
 import { fetchBackend } from "@/utilities/helpers";
+import { notFound, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const AdminPage = () => {
+const OwnerPage = () => {
     // TODO: Need to add validation to ensure user is an admin, logic won't be here
     // TODO: Move off into a component, keep the admin page clean and composed of admin components
+    const params = useParams();
     const [ appointments, setAppointments ] = useState<AppointmentMap>({});
     const [ postError, setPostError ] = useState<string>('');
     const [ postSuccess, setPostSuccess ] = useState<string>('');
+
+    // useEffect(() => {
+
+    // })
 
     const handleDelete = (day: string, index: number) => {
         setAppointments(prev => {
@@ -41,22 +46,22 @@ const AdminPage = () => {
     const onPost = async () => {
         setPostError('');
         setPostSuccess('');
-        const payLoad = formatApptsForBackend(appointments);
-        if (payLoad.length <= 0) return;
+        const payload = formatApptsForBackend(appointments);
+        if (payload.length <= 0) return;
 
-        const res = await fetchBackend("/appointments/create", {
+        const res = await fetchBackend(`/companies/${params.companySlug}/owner/appointments`, {
             headers: {
                 'Content-Type': 'application/json'
             },
             method: "POST",
-            body: JSON.stringify(payLoad)
+            body: JSON.stringify(payload)
         });
 
         if (!res.ok) {
             // TODO: Add more specific errors -- unauthorized, server error, etc...
             setPostError('Error occured when creating appointments, please try again later.');
         } else {
-            setPostSuccess(`Successfully created ${payLoad.length} appointments!`);
+            setPostSuccess(`Successfully created ${payload.length} appointments!`);
         }
     }
 
@@ -97,4 +102,4 @@ const AdminPage = () => {
     );
 }
  
-export default AdminPage;
+export default OwnerPage;

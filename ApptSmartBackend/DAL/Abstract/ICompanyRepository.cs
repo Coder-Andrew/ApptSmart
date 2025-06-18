@@ -6,5 +6,6 @@ namespace ApptSmartBackend.DAL.Abstract
     {
         Task<bool> ExistsAsync(string companySlug);
         Task<Company?> GetBySlugAsync(string companySlug);
+        Task<Company?> CreateCompanyAsync(Company company);
     }
 }

@@ -11,6 +11,7 @@ export interface Appointment {
 export interface UserAppointmentProps {
     bookedAt: Date,
     appointment: Appointment;
+    companyName: string;
 }
 export interface CompanyInformation {
     companyName: string,

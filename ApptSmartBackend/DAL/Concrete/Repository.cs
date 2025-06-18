@@ -114,5 +114,14 @@ namespace ApptSmartBackend.DAL.Concrete
             _context.AddRange(entities);
             _context.SaveChanges();
         }
+
+        public virtual TEntity Add(TEntity entity)
+        {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+            _context.Add(entity);
+            _context.SaveChanges();
+            return entity;
+        }
     }
 }

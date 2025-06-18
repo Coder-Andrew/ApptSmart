@@ -11,7 +11,8 @@ namespace ApptSmartBackend.Extensions
             {
                 Id = model.Id,
                 Appointment = model.Appointment.ToDto(),
-                BookedAt = model.BookedAt
+                BookedAt = model.BookedAt,
+                CompanyName = model.Appointment.Company.CompanyName
             };
         }
 
