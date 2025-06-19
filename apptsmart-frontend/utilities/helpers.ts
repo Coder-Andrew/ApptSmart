@@ -1,4 +1,4 @@
-import { Appointment, RawAppointment } from "@/lib/types"
+import { Appointment, CompanyInformation, RawAppointment } from "@/lib/types"
 
 export function toAppointment({id, startTime, endTime}: RawAppointment): Appointment {
     const start = new Date(startTime);
@@ -51,4 +51,14 @@ export function fetchBackend(input: string, init?: RequestInit): Promise<Respons
         headers,
         credentials: 'include'
     });
+}
+
+export function slugify(input: string): string {
+    if (!input) return "";
+    let cpy = input;
+    cpy = cpy.toLowerCase();
+    cpy = cpy.replaceAll(/[^a-z0-9\s-]/g, "");
+    cpy = cpy.replaceAll(/\s+/g, "-").trim();
+    cpy = cpy.replaceAll(/-+/g, "-");
+    return cpy;
 }

@@ -70,6 +70,17 @@ namespace ApptSmartBackend.DAL.Abstract
         /// <param name="id">The integer PK of the entity to remove</param>
         /// <exception cref="System.Exception">Thrown if no entity with this PK id exists</exception>
         void DeleteById(int id);
+        /// <summary>
+        /// Adds a range/collection of entities to the DB
+        /// </summary>
+        /// <param name="entities">The entities to be added</param>
         void AddRange(IEnumerable<TEntity> entities);
+
+        /// <summary>
+        /// Adds a single TEntity to the DB
+        /// </summary>
+        /// <param name="entity">The entity to be added</param>
+        /// <returns>The entity with fields updated by the DB</returns>
+        TEntity Add(TEntity entity);
     }
 }

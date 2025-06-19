@@ -23,6 +23,7 @@ using ApptSmartBackend.Utilities;
 using ApptSmartBackend.DAL.Abstract;
 using ApptSmartBackend.DAL.Concrete;
 using Microsoft.AspNetCore.Authentication;
+using ApptSmartBackend.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -127,7 +128,13 @@ builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IUserHelperService, UserHelperService>();
 builder.Services.AddScoped<IUserInfoRepositoryAsync, UserInfoRepositoryAsync>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICompanyOwnerService, CompanyOwnerService>();
+builder.Services.AddScoped<IUserAppointmentService, UserAppointmentService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
+
 builder.Services.AddSingleton<JwtHelper>();
 
 var app = builder.Build();
@@ -136,9 +143,15 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     // TODO: Move off into its own class/method
+    string seedPw = builder.Configuration["SeedUserPassword"] ?? throw new KeyNotFoundException("Cannot find seed password");
     var services = scope.ServiceProvider;
-    var userManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-    await ApplicationSeeder.SeedIdentityRolesAsync(userManager);
+    var userManager = services.GetRequiredService<UserManager<AuthUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var appConext = services.GetRequiredService<AppDbContext>();
+    
+    await SimpleDevSeeder.SeedApp(seedPw, appConext, userManager, roleManager);
+    //await ApplicationSeeder.SeedIdentityRolesAsync(userManager); // TODO: UPDATE LATER, MOVING TO SIMPLER SEEDING LOGIC FOR DEV
+
 }
 
 if (app.Environment.IsDevelopment())
@@ -154,6 +167,9 @@ app.UseCors(corsPolicyName);
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Company validation middleware to ensure company slug exists across multiple controllers that will use a company slug
+app.UseCompanyValidation();
 
 app.MapControllers();
 

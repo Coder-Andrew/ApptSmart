@@ -1,19 +1,21 @@
-import AppointmentItem, { AppointmentItemProps } from "../AppointmentItem/AppointmentItem";
+import { UserAppointmentProps } from "@/lib/types";
+import AppointmentItem from "../AppointmentItem/AppointmentItem";
 
 
 export interface AppointmentContainerProps {
     header: string;
-    items: Array<AppointmentItemProps>;
+    items: Array<UserAppointmentProps>;
 }
 
-const AppointmentContainer: React.FC<AppointmentContainerProps> = ({items, header}) => {
+const AppointmentContainer = ({items, header}: AppointmentContainerProps) => {
+    console.log(items);
     return (
         <>
             { items.length > 0 && (
                 <>                
                     <h1>{header}</h1>
-                    { items.map((appt, index) => (
-                        <AppointmentItem key={appt.id} {...appt} />
+                    { items.map((userAppt, index) => (
+                        <AppointmentItem key={index} {...userAppt} />
                     ))}
                 </>
             )}

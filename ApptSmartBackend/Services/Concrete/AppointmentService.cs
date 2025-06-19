@@ -10,30 +10,28 @@ namespace ApptSmartBackend.Services.Concrete
     {
         private readonly IUserAppointmentRepository _userAppointmentsRepo;
         private readonly IAppointmentRepository _appointmentRepo;
-        public AppointmentService(IUserAppointmentRepository userAppointmentsRepo, IAppointmentRepository appointmentRepo)
+        private readonly ICompanyRepository _companyRepository;
+        public AppointmentService(IUserAppointmentRepository userAppointmentsRepo, IAppointmentRepository appointmentRepo, ICompanyRepository companyRepository)
         {
             _userAppointmentsRepo = userAppointmentsRepo;
             _appointmentRepo = appointmentRepo;
+            _companyRepository = companyRepository;
         }
 
-        public IEnumerable<UserAppointment> GetFutureAppointments(Guid userId)
+        public GenericResponse<int> CreateAppointments(List<Appointment> appts)
         {
-            return _userAppointmentsRepo.GetFutureAppointments(userId);
+            _appointmentRepo.AddRange(appts); 
+            return new GenericResponse<int>
+            {
+                Data = appts.Count,
+                Success = true,
+                StatusCode = GenericStatusCode.AppointmentsCreated
+            };
         }
 
-        public IEnumerable<UserAppointment> GetPastAppointments(Guid userId)
+        public IEnumerable<Appointment> GetAvailableAppointments(string companySlug, DateTime date)
         {
-            return _userAppointmentsRepo.GetPastAppointments(userId);
-        }
-
-        public void CreateAppointments(List<Appointment> appts)
-        {
-            _appointmentRepo.AddRange(appts);
-        }
-
-        public IEnumerable<Appointment> GetAvailableAppointments(DateTime date)
-        {
-            return _appointmentRepo.GetAvailableAppointments(date);
+            return _appointmentRepo.GetAvailableAppointments(companySlug, date);
         }
 
         public async Task<GenericResponse<UserAppointment>> BookAppointment(Guid userId, int apptId)
@@ -86,9 +84,9 @@ namespace ApptSmartBackend.Services.Concrete
             };
         }
 
-        public IEnumerable<DateTime> GetAvailableDays(int month)
+        public IEnumerable<DateTime> GetAvailableDays(string companySlug, int month)
         {
-            return _appointmentRepo.GetAvailableDays(month).ToList();
+            return _appointmentRepo.GetAvailableDays(companySlug, month);
         }
     }
 }

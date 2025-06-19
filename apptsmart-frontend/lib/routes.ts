@@ -2,7 +2,7 @@ const placeholder = '/coming-soon';
 const ROUTES = {
     'home': '/',
     'appointments': '/appointments',
-    'schedule': '/schedule',
+    'companyRegistration': '/register-company',
     'features': '/features',
     'about': '/about',
     

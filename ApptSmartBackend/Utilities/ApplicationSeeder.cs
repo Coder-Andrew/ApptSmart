@@ -12,7 +12,7 @@ namespace ApptSmartBackend.Utilities
     {
         public static async Task SeedIdentityRolesAsync(RoleManager<IdentityRole> roleManager)
         {
-            string[] roleNames = { "Admin", "User", "Manager" };
+            string[] roleNames = { "Admin", "User", "CompanyOwner" };
 
             foreach (var roleName in roleNames)
             {
@@ -23,6 +23,24 @@ namespace ApptSmartBackend.Utilities
             }
         }
 
+        private static async Task<Company> CreateSeedCompany(AppDbContext appContext, UserInfo owner, string companyName, string companySlug, string description)
+        {
+            var existing = await appContext.Companies.FirstOrDefaultAsync(c => c.CompanySlug == companySlug);
+            if (existing != null) return existing;
+
+            var company = new Company
+            {
+                CompanyName = companyName,
+                CompanySlug = companySlug,
+                CompanyDescription = description,
+                OwnerId = owner.Id
+            };
+
+            appContext.Companies.Add(company);
+            await appContext.SaveChangesAsync();
+            return company;
+        }
+
         public static async Task<List<string>> SeedUsers(UserManager<AuthUser> userManager, AppDbContext appContext, SeedUserInfo[] seedData, string seedUserPw)
         {
             try
@@ -31,7 +49,7 @@ namespace ApptSmartBackend.Utilities
                 foreach (var user in seedData)
                 {
                     string userId = await SaveAuthUser(userManager, user, seedUserPw);
-                    UserInfo userInfo = CreateUserInfo(userId, user);
+                    UserInfo userInfo = CreateUserInfo(userId, user);                    
                     await SaveAppUser(appContext, userInfo);
                     aspNetUserIds.Add(userId);
                 }
@@ -135,7 +153,10 @@ namespace ApptSmartBackend.Utilities
             if (user == null)
             {
                 await userManager.CreateAsync(authUser, seedUserPw);
-                await userManager.AddToRoleAsync(authUser, userInfo.Role);
+                foreach (var role in userInfo.Roles)
+                {
+                    await userManager.AddToRoleAsync(authUser, role);
+                }
             }
             if (authUser == null)
             {

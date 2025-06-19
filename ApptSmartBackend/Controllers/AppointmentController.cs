@@ -15,7 +15,7 @@ namespace ApptSmartBackend.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/appointments")]
+    [Route("api/{companySlug}/appointments")]
     public class AppointmentController : ControllerBase
     {
         private readonly IAppointmentService _appointmentService;
@@ -28,60 +28,32 @@ namespace ApptSmartBackend.Controllers
             _userHelper = userHelper;
         }
 
-        [HttpGet("futureAppointments")]
-        [ValidateCsrfToken]
-        public ActionResult<UserAppointmentDto> GetFutureAppointments()
-        {
-            ActionResult<Guid> userIdResponse = this.GetUserId(_userHelper);
-
-            if (userIdResponse.Result is UnauthorizedResult || userIdResponse.Result is NotFoundResult) return userIdResponse.Result;
-
-
-            var futureAppointments = _appointmentService.GetFutureAppointments(userIdResponse.Value).ToList();
-
-            List<UserAppointmentDto> appts = futureAppointments.Select(ui => ui.ToDto()).ToList();
-
-            return Ok(appts);
-        }
-
-        [HttpGet("pastAppointments")]
-        public ActionResult<UserAppointmentDto> GetPastAppointments()
-        {
-            ActionResult<Guid> userIdResponse = this.GetUserId(_userHelper);
-
-            if (userIdResponse.Result is UnauthorizedResult || userIdResponse.Result is NotFoundResult) return userIdResponse.Result;
-
-            var pastAppointments = _appointmentService.GetPastAppointments(userIdResponse.Value);
-
-
-            List<UserAppointmentDto> appts = pastAppointments.Select(ui => ui.ToDto()).ToList();
-
-            return Ok(appts);
-        }
-
         [HttpGet("available")]
-        public ActionResult<List<AppointmentDto>> GetAvailableAppointments([FromQuery] DateTime date)
+        public ActionResult<List<AppointmentDto>> GetAvailableAppointments(string companySlug, [FromQuery] DateTime date)
         {
             if (date == default)
             {
-                
                 return BadRequest("Invalid date format");
             }
 
-            return Ok(_appointmentService.GetAvailableAppointments(date)
+            var appts = _appointmentService.GetAvailableAppointments(companySlug, date)
                 .Select(a => a.ToDto())
-                .ToList());
+                .ToList();
+
+            return Ok(appts);
         }
 
         [HttpGet("available/{month:int}")]
-        public ActionResult<List<DateTime>> GetDaysWithAvailableDays(int month)
+        public ActionResult<List<DateTime>> GetDaysWithAvailableDays(string companySlug, int month)
         {
             if (month < 0 || month > 12)
             {
                 return BadRequest("Invalid month");
             }
 
-            return _appointmentService.GetAvailableDays(month).ToList();
+            var appts = _appointmentService.GetAvailableDays(companySlug, month).ToList();
+
+            return Ok(appts);
         }
 
 
@@ -100,30 +72,8 @@ namespace ApptSmartBackend.Controllers
                 {
                     return BadRequest(response.Message);
                 }
-                               
+
                 return Ok(response.Data?.Id);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        [Authorize(Roles = "Admin")]
-        [HttpPost("create")]
-        public ActionResult CreateAppointments([FromBody] List<CreateAppointmentDto> appointments)
-        {
-            try
-            {
-                List<Appointment> appts = appointments.Select(a => new Appointment
-                {
-                    StartTime = a.StartTime,
-                    EndTime = a.EndTime
-                }).ToList();
-
-                _appointmentService.CreateAppointments(appts);
-
-                return Created();
             }
             catch (Exception ex)
             {

@@ -1,14 +1,14 @@
 "use client"
-import { Appointment } from "@/lib/types";
+import { Appointment, UserAppointmentProps } from "@/lib/types";
 
-const AppointmentItem: React.FC<Appointment> = ({startTime, endTime}) => {
-    const startTimeDate = new Date(startTime);
-    const endTimeDate = new Date(endTime);
+const AppointmentItem = ({appointment, bookedAt, companyName}: UserAppointmentProps) => {
+    const startTimeDate = new Date(appointment.startTime);
+    const endTimeDate = new Date(appointment.endTime);
     //console.log(startTime, endTime);
 
     return (
         <div>
-            <p>{ startTimeDate.toLocaleString() } - { endTimeDate.toLocaleString() }</p>
+            <p>{ startTimeDate.toLocaleString() } - { endTimeDate.toLocaleString()} - {companyName}</p>
         </div>
     );
 }

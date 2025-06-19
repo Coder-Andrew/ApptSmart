@@ -4,7 +4,13 @@ using System.Security.Claims;
 
 namespace ApptSmartBackend.Services.Concrete
 {
-    // TODO: If userid lookup becomes a bottleneck, include it in JWT or introduce a cache
+    /// <summary>
+    /// Provides helper methods for retrieving application-specific user information from the current ClaimsPrincipal context.
+    /// </summary>
+    /// <remarks>
+    /// This service is responsible for mapping ASP.NET Identity user claims to application-level user IDs.
+    /// Consider caching or token-based solutions if performance becomes a bottleneck.
+    /// </remarks>
     public class UserHelperService : IUserHelperService
     {
         private readonly IUserInfoRepositoryAsync _userInfoRepositoryAsync;
@@ -15,6 +21,18 @@ namespace ApptSmartBackend.Services.Concrete
             _logger = logger;
         }
 
+        /// <summary>
+        /// Extracts the application-level user ID (UserInfoId) from the given <see cref="ClaimsPrincipal"/>
+        /// </summary>
+        /// <param name="user">The ClaimsPrincipal representing the currently authenticated user.</param>
+        /// <returns>
+        /// A <see cref="GenericResponse{T}"/> containing the user's application-specific <see cref="Guid"/> if found;
+        /// otherwise, an error message and corresponding status code.
+        /// </returns>
+        /// <remarks>
+        /// This method looks up the ASP.NET Identity ID from the user's claims, then maps it to a UserInfoId via the repository.
+        /// Logs a warning if the claim is missing or no matching user is found in the database.
+        /// </remarks>
         public GenericResponse<Guid?> GetUserIdFromClaims(ClaimsPrincipal user)
         {
             string? userAspNetId = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;            
