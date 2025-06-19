@@ -38,7 +38,7 @@ const AppointmentBox = () => {
         const nextAppointment = sortedAppointments[0];
 
         setFutureApointments(jsonResponse);
-        setUpcomingAppointment([nextAppointment]);
+        setUpcomingAppointment(nextAppointment ? [nextAppointment] : []);
     };
 
     const getPastAppointments = async () => {

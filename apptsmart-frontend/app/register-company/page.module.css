@@ -1,0 +1,36 @@
+.companyGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1rem;
+    background-color: var(--background-color);
+    min-height: 100vh;
+}
+
+.headerBox {
+    text-align: center;
+}
+
+.inputBox {
+    width: 100%;
+    max-width: 48rem;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3), 0 10px 10px -5px rgba(0,0,0,0.06);    
+}
+
+.formHeaders {
+    text-align: center;
+}
+
+.formInputs {
+    display: flex;
+    flex-direction: column;
+}
+
+.submitButton {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+}

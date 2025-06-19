@@ -8,13 +8,14 @@ export interface AppointmentContainerProps {
 }
 
 const AppointmentContainer = ({items, header}: AppointmentContainerProps) => {
+    console.log(items);
     return (
         <>
             { items.length > 0 && (
                 <>                
                     <h1>{header}</h1>
                     { items.map((userAppt, index) => (
-                        <AppointmentItem key={userAppt.appointment.id} {...userAppt} />
+                        <AppointmentItem key={index} {...userAppt} />
                     ))}
                 </>
             )}

@@ -30,5 +30,10 @@ namespace ApptSmartBackend.DAL.Concrete
             return await _companies
                 .FirstOrDefaultAsync(c => c.CompanySlug == companySlug);
         }
+
+        public async Task<bool> UserOwnsCompanyAsync(Guid userId)
+        {
+            return await _companies.AnyAsync(c => c.OwnerId == userId);
+        }
     }
 }

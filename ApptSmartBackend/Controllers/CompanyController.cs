@@ -23,7 +23,6 @@ namespace ApptSmartBackend.Controllers
         private readonly ILogger<CompanyController> _logger;
         private readonly IUserHelperService _userHelper;
         private readonly UserManager<AuthUser> _userManager; // Maybe move this off to a service
-        private readonly IUserInfoRepositoryAsync _userInfoRepository;
         // TODO: Refactor this. I don't feel like I should be using this many services in this controller
         public CompanyController(
             ICompanyService companyService,
@@ -37,7 +36,6 @@ namespace ApptSmartBackend.Controllers
             _logger = logger;
             _userHelper = userHelper;
             _userManager = userManager;
-            _userInfoRepository = userInfoRepository;
         }
 
         [HttpGet("{companySlug}/exists")]
@@ -85,11 +83,9 @@ namespace ApptSmartBackend.Controllers
 
                 var ownerId = userIdResponse.Value;
 
-                var userInfo = await _userInfoRepository.FindByIdAsync(ownerId);
-
-                if (userInfo == null || userInfo.Companies.ToList().Count != 0)
+                if (await _companyService.UserOwnsCompanyAsync(ownerId))
                 {
-                    return Forbid("User cannot have more than one company");
+                    return BadRequest("User already owns a company");
                 }
 
                 Company company = new Company
@@ -120,7 +116,7 @@ namespace ApptSmartBackend.Controllers
             }
             catch (DbUpdateException ex)
             {
-                _logger.LogError(ex, $"Failed to add company ${dto.CompanyName}. Duplicate company.");
+                _logger.LogError(ex, $"Failed to add company ${dto.CompanyName}.");
                 return StatusCode(500, ErrorMessages.Generic);
             }
             catch (Exception ex)

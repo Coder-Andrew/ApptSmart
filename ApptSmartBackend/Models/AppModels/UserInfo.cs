@@ -13,7 +13,7 @@ public partial class UserInfo
 
     public string? LastName { get; set; }
 
-    public virtual ICollection<Company> Companies { get; set; } = new List<Company>();
+    public virtual Company? Company { get; set; }
 
     public virtual ICollection<UserAppointment> UserAppointments { get; set; } = new List<UserAppointment>();
 }

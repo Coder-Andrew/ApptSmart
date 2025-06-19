@@ -44,5 +44,10 @@ namespace ApptSmartBackend.Services.Concrete
                 Message = $"Company '{company.CompanySlug}' with id {company.Id} created successfully"
             };
         }
+
+        public async Task<bool> UserOwnsCompanyAsync(Guid userId)
+        {
+            return await _companyRepository.UserOwnsCompanyAsync(userId);
+        }
     }
 }

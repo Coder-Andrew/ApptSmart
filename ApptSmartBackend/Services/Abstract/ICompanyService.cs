@@ -7,5 +7,6 @@ namespace ApptSmartBackend.Services.Abstract
         public Task<Company?> GetCompanyAsync(string companySlug);
         public Task<bool> CompanyExists(string companySlug);
         public Task<GenericResponse<Company>> CreateCompanyAsync(Company company);
+        public Task<bool> UserOwnsCompanyAsync(Guid userId);
     }
 }
