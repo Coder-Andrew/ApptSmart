@@ -130,6 +130,7 @@ builder.Services.AddScoped<IUserHelperService, UserHelperService>();
 builder.Services.AddScoped<IUserInfoRepositoryAsync, UserInfoRepositoryAsync>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICompanyOwnerService, CompanyOwnerService>();
 builder.Services.AddScoped<IUserAppointmentService, UserAppointmentService>();

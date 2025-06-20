@@ -53,6 +53,25 @@ export function fetchBackend(input: string, init?: RequestInit): Promise<Respons
     });
 }
 
+export async function fetchBackendWithAutoRefresh(input: string, init?: RequestInit): Promise<Response> {
+    const res = await fetchBackend(input, init);
+
+    if (res.status !== 401) return res;
+
+    // Try to refresh token
+    const refreshRes = await fetchBackend("auth/refresh", {
+        method: "POST",
+        credentials: "include"
+    });
+
+    if (!refreshRes.ok) {
+        throw new Error("Refresh failed. User must re-login.");
+    }
+
+    // Retry original request
+    return fetchBackend(input, init);
+}
+
 export function slugify(input: string): string {
     if (!input) return "";
     let cpy = input;

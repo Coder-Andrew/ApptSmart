@@ -47,15 +47,15 @@ namespace ApptSmartBackend.Helpers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public string GenerateCsrf()
+        public string GenerateUrlSafeToken(int byteSize = 32)
         {
-            var tokenBytes = new byte[32];
+            var tokenBytes = new byte[byteSize];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(tokenBytes);
             return Convert.ToBase64String(tokenBytes)
-                .TrimEnd('=')
                 .Replace('+', '-')
-                .Replace('/','+');
+                .Replace('/', '_')
+                .Replace("=", "");
         }
     }
 }

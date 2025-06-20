@@ -9,6 +9,8 @@ namespace ApptSmartBackend.SettingsObjects
         public string Secret { get; set; } = string.Empty;
         [Required]
         public int ExpiryMinutes { get; set; }
+        [Required]
+        public int RefreshExpiryMinutes { get; set; }
         //public string Issuer { get; set; }
         //public string Audience { get; set; }
         //public string RefreshTokenSecret { get; set; }

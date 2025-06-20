@@ -3,7 +3,7 @@
 import AppointmentContainer from "@/components/UI/Appointments/AppointmentContainer/AppointmentContainer";
 import AppointmentItem from "@/components/UI/Appointments/AppointmentItem/AppointmentItem";
 import { Appointment, UserAppointmentProps } from "@/lib/types";
-import { fetchBackend, getCsrftoken } from "@/utilities/helpers";
+import { fetchBackendWithAutoRefresh } from "@/utilities/helpers";
 import { useEffect, useState } from "react";
 
 
@@ -19,7 +19,7 @@ const AppointmentBox = () => {
     }, []);
 
     const getFutureAppointments = async () => {
-        const response = await fetchBackend("/userAppointments/futureAppointments", {
+        const response = await fetchBackendWithAutoRefresh("/userAppointments/futureAppointments", {
             method: "GET",
             credentials: "include"
         });
@@ -42,7 +42,7 @@ const AppointmentBox = () => {
     };
 
     const getPastAppointments = async () => {
-        const response = await fetchBackend("/userAppointments/pastAppointments", {
+        const response = await fetchBackendWithAutoRefresh("/userAppointments/pastAppointments", {
             method: "GET"
         });
 

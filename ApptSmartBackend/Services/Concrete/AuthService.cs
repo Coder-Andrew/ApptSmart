@@ -6,23 +6,40 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using ApptSmartBackend.DAL.Abstract;
 using ApptSmartBackend.Models.AppModels;
+using Microsoft.Extensions.Options;
+using ApptSmartBackend.SettingsObjects;
 
 namespace ApptSmartBackend.Services.Concrete
 {
-    // TODO: Move to an architecture/service layer that returns/handles models
+    /// <summary>
+    /// Provides authentication-related functionality including login, registration,
+    /// user info retrieval, and refresh token management
+    /// </summary>
     public class AuthService : IAuthService
     {
         private readonly UserManager<AuthUser> _userManager;
         private readonly JwtHelper _jwtHelper;
         private readonly IUserInfoRepositoryAsync _appUserRepository;
-        // TODO: Add logging
-        public AuthService(UserManager<AuthUser> userManager, IUserInfoRepositoryAsync appUserRepo, JwtHelper jwtHelper)
+        private readonly IRefreshTokenService _refreshTokenService;
+
+        // TODO: Move to an architecture/service layer that returns/handles models directly
+        // TODO: Add logging for error reporting, auth events, etc.
+        public AuthService(UserManager<AuthUser> userManager, IUserInfoRepositoryAsync appUserRepo, JwtHelper jwtHelper, IRefreshTokenService refreshTokenService)
         {
             _userManager = userManager;
             _jwtHelper = jwtHelper;
             _appUserRepository = appUserRepo;
+            _refreshTokenService = refreshTokenService;
         }
 
+        /// <summary>
+        /// Extracts and returns application-specific user information from the provided claims.
+        /// </summary>
+        /// <param name="user">The <see cref="ClaimsPrincipal"/> associated with the current user context.</param>
+        /// <returns>
+        /// A <see cref="GenericResponse{UserInfoDto}"/> containing the user's ID, email, and roles.
+        /// Returns a failure response if required claims are missing.
+        /// </returns>
         public GenericResponse<UserInfoDto> GetUserInfo(ClaimsPrincipal user)
         {
             // TODO: Find out a better way to pass message around
@@ -61,6 +78,14 @@ namespace ApptSmartBackend.Services.Concrete
             );
         }
 
+        /// <summary>
+        /// Attempts to authenticate a user with provided credentials and issues JWT + refresh token if successful.
+        /// </summary>
+        /// <param name="loginInfo">The user's login credentials including email and password.</param>
+        /// <returns>
+        /// A <see cref="GenericResponse{AuthResponseDto}"/> containing the generated tokens if successful
+        /// or an error message on failure
+        /// </returns>
         public async Task<GenericResponse<AuthResponseDto>> Login(LoginDto loginInfo)
         {
             AuthUser? user = await _userManager.FindByEmailAsync(loginInfo.Email);
@@ -76,12 +101,16 @@ namespace ApptSmartBackend.Services.Concrete
             }
 
             var userRoles = await _userManager.GetRolesAsync(user);
+            var jwt = _jwtHelper.GenerateJwt(user, userRoles);
+
+            var refreshToken = await _refreshTokenService.CreateRefreshTokenAsync(user);            
 
             return new GenericResponse<AuthResponseDto>(
                 data: new AuthResponseDto
                 {
-                    Jwt = _jwtHelper.GenerateJwt(user, userRoles),
-                    CsrfToken = _jwtHelper.GenerateCsrf(),
+                    Jwt = jwt,
+                    CsrfToken = _jwtHelper.GenerateUrlSafeToken(),
+                    RefreshToken = refreshToken.Token,
                 },
                 success: true,
                 message: "Login successful",
@@ -95,9 +124,17 @@ namespace ApptSmartBackend.Services.Concrete
             throw new NotImplementedException();
         }
 
-        // TODO: Handle errors better and add transaction scoping
+        /// <summary>
+        /// Handles the registration of a new user. Creates a new <see cref="AuthUser"/> and <see cref="UserInfo"/> model and saves in to their respecive databases.
+        /// </summary>
+        /// <param name="registerInfo">The registration information including email, password, and name.</param>
+        /// <returns>
+        /// A <see cref="GenericResponse{string}"/> containing the user's identity ID if successful,
+        /// or an error code/message on failure.
+        /// </returns>
         public async Task<GenericResponse<string>> Register(RegisterDto registerInfo)
         {
+            // TODO: Handle errors better and add transaction scoping
             if (await _userManager.FindByEmailAsync(registerInfo.Email) != null)
             {
                 return new GenericResponse<string>(
