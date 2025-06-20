@@ -18,23 +18,23 @@ public static class SeedData
             {
                 new Appointment
                 {
-                    StartTime = DateTime.Now.AddDays(3),
-                    EndTime = DateTime.Now.AddDays(3).AddHours(1),
+                    StartTime = DateTime.UtcNow.AddDays(3),
+                    EndTime = DateTime.UtcNow.AddDays(3).AddHours(1),
                 },
                 new Appointment
                 {
-                    StartTime = DateTime.Now.AddDays(4),
-                    EndTime = DateTime.Now.AddDays(4).AddHours(1),
+                    StartTime = DateTime.UtcNow.AddDays(4),
+                    EndTime = DateTime.UtcNow.AddDays(4).AddHours(1),
                 },
                 new Appointment
                 {
-                    StartTime = DateTime.Now.AddDays(-5),
-                    EndTime = DateTime.Now.AddDays(-5).AddHours(2),
+                    StartTime = DateTime.UtcNow.AddDays(-5),
+                    EndTime = DateTime.UtcNow.AddDays(-5).AddHours(2),
                 },
                 new Appointment
                 {
-                    StartTime = DateTime.Now.AddDays(5),
-                    EndTime = DateTime.Now.AddDays(5).AddHours(3)
+                    StartTime = DateTime.UtcNow.AddDays(5),
+                    EndTime = DateTime.UtcNow.AddDays(5).AddHours(3)
                 }
             }
         ),
@@ -50,29 +50,29 @@ public static class SeedData
             {
                 new UserAppointment
                 {
-                    BookedAt = DateTime.Now.AddDays(10).AddHours(5),
+                    BookedAt = DateTime.UtcNow.AddDays(10).AddHours(5),
                     Appointment = new Appointment
                     {
-                        StartTime = DateTime.Now.AddDays(11).AddHours(5),
-                        EndTime = DateTime.Now.AddDays(12),
+                        StartTime = DateTime.UtcNow.AddDays(11).AddHours(5),
+                        EndTime = DateTime.UtcNow.AddDays(12),
                     }
                 },
                 new UserAppointment
                 {
-                    BookedAt = DateTime.Now.AddDays(-5).AddHours(-5),
+                    BookedAt = DateTime.UtcNow.AddDays(-5).AddHours(-5),
                     Appointment = new Appointment
                     {
-                        StartTime = DateTime.Now.AddDays(-5).AddHours(-1),
-                        EndTime = DateTime.Now.AddDays(-5)
+                        StartTime = DateTime.UtcNow.AddDays(-5).AddHours(-1),
+                        EndTime = DateTime.UtcNow.AddDays(-5)
                     }
                 },
                 new UserAppointment
                 {
-                    BookedAt = DateTime.Now,
+                    BookedAt = DateTime.UtcNow,
                     Appointment = new Appointment
                     {
-                        StartTime = DateTime.Now.AddDays(60).AddHours(2),
-                        EndTime = DateTime.Now.AddDays(61)
+                        StartTime = DateTime.UtcNow.AddDays(60).AddHours(2),
+                        EndTime = DateTime.UtcNow.AddDays(61)
                     }
                 }
             }
@@ -86,20 +86,20 @@ public static class SeedData
             {
                 new UserAppointment()
                 {
-                    BookedAt = DateTime.Now.AddDays(-10),
+                    BookedAt = DateTime.UtcNow.AddDays(-10),
                     Appointment = new Appointment
                     {
-                        StartTime = DateTime.Now.AddDays(-5),
-                        EndTime = DateTime.Now.AddDays(-5).AddMinutes(30)
+                        StartTime = DateTime.UtcNow.AddDays(-5),
+                        EndTime = DateTime.UtcNow.AddDays(-5).AddMinutes(30)
                     }
                 },
                 new UserAppointment()
                 {
-                    BookedAt = DateTime.Now.AddDays(5),
+                    BookedAt = DateTime.UtcNow.AddDays(5),
                     Appointment = new Appointment
                     {
-                        StartTime = DateTime.Now.AddDays(10),
-                        EndTime = DateTime.Now.AddDays(10).AddHours(2)
+                        StartTime = DateTime.UtcNow.AddDays(10),
+                        EndTime = DateTime.UtcNow.AddDays(10).AddHours(2)
                     }
                 }
             },

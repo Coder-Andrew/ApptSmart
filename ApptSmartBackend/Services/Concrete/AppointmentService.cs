@@ -57,7 +57,7 @@ namespace ApptSmartBackend.Services.Concrete
                     StatusCode = GenericStatusCode.AppointmentAlreadyBooked
                 };
             }
-            if (appt.StartTime < DateTime.Now)
+            if (appt.StartTime < DateTime.UtcNow)
             {
                 return new GenericResponse<UserAppointment>
                 {
@@ -72,7 +72,7 @@ namespace ApptSmartBackend.Services.Concrete
             {
                 UserInfoId = userId,
                 Appointment = appt,
-                BookedAt = DateTime.Now,
+                BookedAt = DateTime.UtcNow,
             };
             await _userAppointmentsRepo.AddOrUpdateAsync(userAppt);
             return new GenericResponse<UserAppointment>

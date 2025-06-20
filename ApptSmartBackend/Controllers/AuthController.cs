@@ -158,7 +158,8 @@ namespace ApptSmartBackend.Controllers
             return Ok("User logged out");
         }
 
-        [HttpGet("refresh")]
+        [ValidateCsrfToken]
+        [HttpPost("refresh")]
         public async Task<IActionResult> Refresh()
         {
             // This method is getting a little bloated, might want to move to a service

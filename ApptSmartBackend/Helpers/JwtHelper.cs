@@ -37,7 +37,7 @@ namespace ApptSmartBackend.Helpers
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(_jwtSettings.ExpiryMinutes),
+                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes),
                 signingCredentials: credentials
                 // issuer: _jwtSetting.Issuer       // CHANGE IN PRODUCTIONS
                 // audience: _jwtSetting.Audience   // CHANGE IN PRODUCTIONS
