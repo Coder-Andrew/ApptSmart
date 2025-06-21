@@ -33,7 +33,7 @@ const Register = () => {
         }
 
         // for later, assign/login user after successful registration
-        //user.login(email, password);
+        user.login(email, password);
         router.push("/");
     };
 

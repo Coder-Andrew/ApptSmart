@@ -1,6 +1,5 @@
 "use client"
 
-import Schedule from "@/app/schedule/page";
 import { Calendar } from "@/components/schedule-appointments/calendar";
 import { CompanyInformation } from "@/lib/types";
 import { fetchBackend } from "@/utilities/helpers";
@@ -28,7 +27,7 @@ const CompanySchedule = () => {
                 if (!res.ok) throw new Error("Not found");
                 const jsonRes: CompanyInformation = await res.json();
                 setCompanyInfo(jsonRes);
-            } catch (err) {
+            } catch {
                 setPageError("Not found");
             } finally {
                 setIsLoading(false);

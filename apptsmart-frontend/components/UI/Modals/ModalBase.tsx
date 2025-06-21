@@ -9,8 +9,8 @@ type ModalBaseProps = {
 }
 
 const ModalBase: React.FC<ModalBaseProps> = ({ children, modalName,  handleClose}) => {
+    const { closeModal } = useModal();
     if (typeof handleClose === "undefined") {
-        const { closeModal } = useModal();
         handleClose = closeModal;
     }
 

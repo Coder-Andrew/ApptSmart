@@ -27,7 +27,7 @@ export async function handler(req: NextRequest, { params }: { params: { path: st
       ? NextResponse.json(data, { status: res.status, headers: res.headers })
       : new NextResponse(data, { status: res.status, headers: res.headers });
 
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: "Failed to fetch from backend" }, { status: 500 });
   }
 }

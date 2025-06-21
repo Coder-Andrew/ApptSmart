@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import {
   format,
   startOfMonth,
@@ -13,7 +13,7 @@ import {
 } from "date-fns"
 import "./calendar-ui.css"
 import { fetchBackend } from "@/utilities/helpers"
-import { Appointment } from "@/lib/types"
+
 
 interface CalendarProps {
   mode: "single"
@@ -23,7 +23,7 @@ interface CalendarProps {
   companySlug: string
 }
 
-export function Calendar({companySlug, mode, selected, onSelect, className = "" }: CalendarProps) {
+export function Calendar({companySlug, selected, onSelect, className = "" }: CalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date())
 
   const [ availableDays, setAvailableDays ] = useState<Set<string>>();
@@ -59,20 +59,19 @@ export function Calendar({companySlug, mode, selected, onSelect, className = "" 
     }
   }
 
-  const getAvailableDays = async () => {
+  const getAvailableDays = useCallback(async () => {
     const res = await fetchBackend(`${companySlug}/appointments/available/${currentMonth.getMonth() + 1}`);
 
     if (!res.ok) {
-
       return;
     }
     const json: Array<string> = await res.json();
     setAvailableDays(new Set(json.map(d => new Date(d).getDate().toString())));
-  }
+  }, [companySlug, currentMonth])
   
   useEffect(() => {
     getAvailableDays();
-  }, [currentMonth])
+  }, [currentMonth, getAvailableDays])
 
   return (
     <div className={`calendar-ui ${className}`}>

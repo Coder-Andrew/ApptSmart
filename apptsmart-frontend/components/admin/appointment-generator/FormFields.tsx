@@ -2,6 +2,7 @@ import ErrorableFormField from "@/components/UI/ErrorableFormField";
 import TimeSelect from "./TimeSelect";
 import { useEffect, useState } from "react";
 import styles from "./FormFields.module.css";
+import { AdminAppointment, AppointmentMap } from "@/lib/types";
 
 type FormFieldsProps = {
     onGenerate: (appointments: AppointmentMap) => void;
@@ -112,7 +113,7 @@ const FormFields = ({ onGenerate }: FormFieldsProps) => {
         const endDateObj = new Date(endDate);
         
         // Iterate through each day
-        let currentDate = new Date(startDateObj);
+        const currentDate = new Date(startDateObj);
         while (currentDate <= endDateObj) {
             // Format as YYYY-MM-DD for the object key
             const dayKey = currentDate.toISOString().split('T')[0];

@@ -1,12 +1,16 @@
+interface logoProps {
+    className?: string;
+    circleColorClass?: string;
+    rectColorClass?: string;
+};
+
 const Logo = ({
     className,
     circleColorClass = "fill-secondary",
     rectColorClass = "fill-tertiary"
-}) => {
-    const x = 100;
-    const y = 100;
-
+}: logoProps) => {
     
+
     const cRad = Math.sqrt(880) / 2;
     const cRadOffset = Math.SQRT2 * cRad;
     const cOffset = 1;

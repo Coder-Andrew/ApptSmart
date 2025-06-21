@@ -3,8 +3,8 @@ import ApptViewer from "@/components/admin/appointment-generator/ApptViewer";
 import FormFields from "@/components/admin/appointment-generator/FormFields";
 import { AppointmentMap } from "@/lib/types"
 import { fetchBackend } from "@/utilities/helpers";
-import { notFound, useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { useState } from "react";
 
 const OwnerPage = () => {
     // TODO: Need to add validation to ensure user is an admin, logic won't be here

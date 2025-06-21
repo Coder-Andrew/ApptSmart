@@ -1,8 +1,7 @@
 "use client"
 
 import AppointmentContainer from "@/components/UI/Appointments/AppointmentContainer/AppointmentContainer";
-import AppointmentItem from "@/components/UI/Appointments/AppointmentItem/AppointmentItem";
-import { Appointment, UserAppointmentProps } from "@/lib/types";
+import { UserAppointmentProps } from "@/lib/types";
 import { fetchBackendWithAutoRefresh } from "@/utilities/helpers";
 import { useEffect, useState } from "react";
 

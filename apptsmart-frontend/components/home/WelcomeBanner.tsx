@@ -17,7 +17,7 @@ const WelcomeBanner = () => {
               <span className="text-secondary font-secondary">personal touch</span>
             </p>
             <p className={styles.secondaryHeader}>
-              <span className={styles.lineBreak}>We're here to link you directly to a number of providers,</span>
+              <span className={styles.lineBreak}>We&apos;re here to link you directly to a number of providers,</span>
               <span>effortlessly connecting you with the services you need.</span>
             </p>
             <div className={styles.buttonGroup}>

@@ -3,10 +3,9 @@
 import { format } from "date-fns"
 import { TimeSlot } from "./time-slot"
 import styles from "./day-view.module.css"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Appointment, RawAppointment } from "@/lib/types"
 import { fetchBackend, toAppointment } from "@/utilities/helpers"
-import { useRouter } from "next/router"
 import ROUTES from "@/lib/routes"
 import { redirect } from "next/navigation"
 
@@ -25,13 +24,7 @@ export function DayView({ companySlug, date }: DayViewProps) {
   const [timeSlots, setTimeSlots] = useState<Appointment[]>([]);
   const [ selectedAppt, setSelectedAppt ] = useState<number|null>(null);
 
-
-  useEffect(() =>{
-    getAvailableAppointments();
-    setSelectedAppt(null);
-  },[date]);
-
-  const getAvailableAppointments = async () => {
+  const getAvailableAppointments = useCallback(async () => {
     setDayError('');
     // TODO: Need to figure out local/iso conversion.
     const params = new URLSearchParams({
@@ -57,7 +50,7 @@ export function DayView({ companySlug, date }: DayViewProps) {
 
 
     setTimeSlots(dateData);
-  }
+  }, [companySlug, date]);
 
   const bookAppointment = async () => {
     setBookError('');
@@ -80,6 +73,10 @@ export function DayView({ companySlug, date }: DayViewProps) {
     redirect(ROUTES.appointments);
   }
 
+  useEffect(() =>{
+    getAvailableAppointments();
+    setSelectedAppt(null);
+  },[date, getAvailableAppointments]);
 
   return (
     <div className={styles.dayView}>

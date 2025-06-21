@@ -3,7 +3,6 @@ import { ModalType, useModal } from "@/providers/ModalProvider";
 import ModalBase from "../ModalBase";
 import styles from "./LoginModal.module.css";
 import { FormEvent, useEffect, useState } from "react";
-import { FaRegCalendarAlt } from "react-icons/fa";
 import ErrorableFormField from "../../ErrorableFormField";
 import { useUser } from "@/stores/UserContext";
 import { LoginError } from "@/utilities/loginError";
@@ -12,7 +11,7 @@ import { useRouter } from "next/navigation";
 
 const LoginModal = () => {
     const { isModalOpen, closeModal, openModal } = useModal();
-    const { user, login, redirectPath, setRedirectPath } = useUser();
+    const { login, redirectPath, setRedirectPath } = useUser();
     const router = useRouter();
     
     const modalName = "login";
