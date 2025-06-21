@@ -1,6 +1,6 @@
 "use client"
 
-import { fetchBackend } from "@/utilities/helpers";
+import { fetchBackend, fetchBackendWithAutoRefresh } from "@/utilities/helpers";
 import { LoginError, LoginErrorCode } from "@/utilities/loginError";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -30,8 +30,7 @@ export const UserProvider = ({ children } : { children: React.ReactNode }) => {
     const fetchUser = async () => {
         try {
             setAuthReady(false);
-            // TODO: Set to fetchBackendWithAutoRefresh
-            const response = await fetchBackend("/auth/me",{
+            const response = await fetchBackendWithAutoRefresh("/auth/me",{
                 method: "GET",
             });
 
