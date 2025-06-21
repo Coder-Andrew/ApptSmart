@@ -33,7 +33,9 @@ export function getCsrftoken(): string {
     return getUriSafeCookie("XSRF-TOKEN");
 }
 
+// A wrapper for the standard fetch request which routes requests through the api
 export function fetchBackend(input: string, init?: RequestInit): Promise<Response> {
+    
     const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""; // For modifying base path later, for portfolio site
     const url = `${basePath}/api/backend${input.startsWith('/') ? input : `/${input}`}`;
 

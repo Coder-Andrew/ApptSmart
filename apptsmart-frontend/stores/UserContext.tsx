@@ -5,9 +5,9 @@ import { LoginError, LoginErrorCode } from "@/utilities/loginError";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
-    id: string,
-    email: string,
-    roles: Array<string>
+    id: string;
+    email: string;
+    roles: string[];
 };
 
 interface UserContextType {
@@ -15,6 +15,8 @@ interface UserContextType {
     refreshUser: () => Promise<void>;
     logout: () => Promise<void>;
     login: (email: string, password: string) => Promise<void>;
+    redirectPath: string | null;
+    setRedirectPath: (path: string | null) => void;
     authReady: boolean,
 }
 
@@ -23,6 +25,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider = ({ children } : { children: React.ReactNode }) => {
     const [ user, setUser ] = useState<User | null>(null);
     const [ authReady, setAuthReady ] = useState<boolean>(false);
+    const [redirectPath, setRedirectPath] = useState<string | null>(null);
 
     const fetchUser = async () => {
         try {
@@ -76,7 +79,7 @@ export const UserProvider = ({ children } : { children: React.ReactNode }) => {
             }
         }
 
-        fetchUser();
+        await fetchUser();
     };
 
     useEffect(() => {
@@ -84,7 +87,16 @@ export const UserProvider = ({ children } : { children: React.ReactNode }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, refreshUser: fetchUser, logout, login, authReady }}>
+        <UserContext.Provider value={{
+            user, 
+            refreshUser: fetchUser, 
+            logout, 
+            login, 
+            authReady, 
+            redirectPath,
+            setRedirectPath,
+            }}
+        >
             { children }
         </UserContext.Provider>
     );

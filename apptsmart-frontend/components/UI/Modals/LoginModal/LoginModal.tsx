@@ -8,10 +8,12 @@ import ErrorableFormField from "../../ErrorableFormField";
 import { useUser } from "@/stores/UserContext";
 import { LoginError } from "@/utilities/loginError";
 import { Calendar } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const LoginModal = () => {
     const { isModalOpen, closeModal, openModal } = useModal();
-    const { user, login } = useUser();
+    const { user, login, redirectPath, setRedirectPath } = useUser();
+    const router = useRouter();
     
     const modalName = "login";
     
@@ -38,6 +40,10 @@ const LoginModal = () => {
             setTimeout(() => {
                 closeModal(modalName)
                 setSuccess(false);
+                if (redirectPath) {
+                    router.push(redirectPath);
+                    setRedirectPath(null);
+                }
             },1500);
         } catch (err) {
             if (err instanceof LoginError) {

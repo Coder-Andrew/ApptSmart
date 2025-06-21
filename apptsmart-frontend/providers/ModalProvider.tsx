@@ -1,5 +1,6 @@
 "use client"
 
+import { useSearchParams, useRouter } from "next/navigation";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 export type ModalType = 'register' | 'login';
@@ -16,6 +17,10 @@ const ModalContext = createContext<ModalContextType | undefined>(undefined);
 export const ModalProvider: React.FC<{ children: ReactNode}> = ({ children }) => {
     const [ openModals, setOpenModals ] = useState<ModalType[]>([]);
 
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const redirect = searchParams.get("redirect");
+
     const openModal = (modalType: ModalType) => {
         setOpenModals(prev => 
             prev.includes(modalType) ? prev : [...prev, modalType]
@@ -23,6 +28,7 @@ export const ModalProvider: React.FC<{ children: ReactNode}> = ({ children }) =>
     };
 
     const closeModal = (modalType?: ModalType) => {
+        if (redirect) router.replace("/");
         if (modalType) {
             setOpenModals(prev => prev.filter(modal => modal !== modalType));
         } else {
@@ -31,10 +37,7 @@ export const ModalProvider: React.FC<{ children: ReactNode}> = ({ children }) =>
     };
 
     const isModalOpen = (modalType?: ModalType) => {
-        if (modalType) {
-            return openModals.includes(modalType);
-        }
-        return openModals.length > 0;
+        return modalType ? openModals.includes(modalType) : openModals.length > 0;
     }
     
     return ( 

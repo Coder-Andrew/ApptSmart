@@ -8,6 +8,7 @@ import Logo from "../Logo/Logo";
 import ROUTES from "@/lib/routes";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { useEffect, useState } from "react";
+import ProtectedLinkButton from "../Auth/ProtectedLink";
 
 
 const Navbar = () => {
@@ -62,8 +63,8 @@ const Navbar = () => {
 
     const navLinks = [
         { name: "Home", path: "/"},
-        { name: "Appointments", path: ROUTES.appointments },
-        { name: 'Company Registration', path: ROUTES.companyRegistration },
+        { name: "Appointments", path: ROUTES.appointments, protected: true },
+        { name: 'Company Registration', path: ROUTES.companyRegistration, protected: true },
         { name: "Contact Us", path: ROUTES.contactUs }
     ];
 
@@ -82,14 +83,19 @@ const Navbar = () => {
             <>
                 <div className={styles.navLinkGroup}>
                     { navLinks.map(nl => (
+                        !nl.protected ?
                         <Link 
                             key={nl.name}
                             href={nl.path}
-                            className={pathname == nl.path ? "text-secondary" : "text-muted"}
+                            className={pathname === nl.path ? "text-secondary" : "text-muted"}
                             onClick={()=>closeDropdown()}
                         >
                             {nl.name}
-                        </Link>
+                        </Link> :
+                        <ProtectedLinkButton key = {nl.name} href={nl.path} className={pathname === nl.path ? "text-secondary" : "text-muted"}>
+                            {nl.name}
+                        </ProtectedLinkButton>
+
                     ))}
                 </div>
                 <div className={`${authReady ? "visible" : "invisible" } ${styles.navUserGroup}`}>

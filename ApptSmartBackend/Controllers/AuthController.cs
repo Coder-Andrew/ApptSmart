@@ -154,6 +154,7 @@ namespace ApptSmartBackend.Controllers
 
             Response.Cookies.Delete("AuthRefreshToken");
             Response.Cookies.Delete("AuthToken");
+            Response.Cookies.Delete("XSRF-TOKEN");
 
             return Ok("User logged out");
         }
