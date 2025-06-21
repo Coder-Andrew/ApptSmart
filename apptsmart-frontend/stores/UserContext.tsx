@@ -30,6 +30,7 @@ export const UserProvider = ({ children } : { children: React.ReactNode }) => {
     const fetchUser = async () => {
         try {
             setAuthReady(false);
+            // TODO: Set to fetchBackendWithAutoRefresh
             const response = await fetchBackend("/auth/me",{
                 method: "GET",
             });

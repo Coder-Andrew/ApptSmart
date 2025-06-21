@@ -1,5 +1,5 @@
 "use client"
-import { useModal } from "@/providers/ModalProvider";
+import { ModalType, useModal } from "@/providers/ModalProvider";
 import ModalBase from "../ModalBase";
 import styles from "./LoginModal.module.css";
 import { FormEvent, useEffect, useState } from "react";
@@ -29,6 +29,11 @@ const LoginModal = () => {
 
     if (!isModalOpen(modalName)) return null;
 
+    const handleClose = (modalName: ModalType) => {
+        if (redirectPath) setRedirectPath(null);
+        closeModal(modalName);
+    }
+
     const loginUser = async (e: FormEvent) => {
         e.preventDefault();
         setEmail("");
@@ -55,7 +60,7 @@ const LoginModal = () => {
     }
 
     return (
-        <ModalBase modalName={modalName}>
+        <ModalBase modalName={modalName} handleClose={handleClose}>
             <div className={`bg-background ${styles.container}`}>
                 <div className={`bg-tertiary ${styles.left}`}>
                     <h1 className={`font-primary`}>Login to ApptSmart!</h1>
@@ -65,7 +70,7 @@ const LoginModal = () => {
                 </div>
                 <div className={`bg-background ${styles.right}`}>
                     <p className={`cursor-pointer text-primary ${styles.closeButton}`}
-                        onClick={() => closeModal(modalName)}
+                        onClick={() => handleClose(modalName)}
                     >
                         &times;
                     </p>
@@ -95,7 +100,7 @@ const LoginModal = () => {
                         <p>Need an account?</p>
                         <p
                             className={`text-secondary cursor-pointer`}
-                            onClick={()=>{closeModal(modalName);openModal("register")}}
+                            onClick={()=>{handleClose(modalName);openModal("register")}}
                             >
                                 Register
                             </p>
