@@ -1,17 +1,18 @@
 "use client"
-import { useModal } from "@/providers/ModalProvider";
+import { ModalType, useModal } from "@/providers/ModalProvider";
 import ModalBase from "../ModalBase";
 import styles from "./LoginModal.module.css";
 import { FormEvent, useEffect, useState } from "react";
-import { FaRegCalendarAlt } from "react-icons/fa";
 import ErrorableFormField from "../../ErrorableFormField";
 import { useUser } from "@/stores/UserContext";
-import { LoginError } from "@/utilities/loginError";
 import { Calendar } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { LoginError, LoginErrorCode } from "@/utilities/loginError";
 
 const LoginModal = () => {
     const { isModalOpen, closeModal, openModal } = useModal();
-    const { user, login } = useUser();
+    const { login, redirectPath, setRedirectPath } = useUser();
+    const router = useRouter();
     
     const modalName = "login";
     
@@ -27,6 +28,11 @@ const LoginModal = () => {
 
     if (!isModalOpen(modalName)) return null;
 
+    const handleClose = (modalName: ModalType) => {
+        if (redirectPath) setRedirectPath(null);
+        closeModal(modalName);
+    }
+
     const loginUser = async (e: FormEvent) => {
         e.preventDefault();
         setEmail("");
@@ -38,18 +44,22 @@ const LoginModal = () => {
             setTimeout(() => {
                 closeModal(modalName)
                 setSuccess(false);
+                if (redirectPath) {
+                    router.push(redirectPath);
+                    setRedirectPath(null);
+                }
             },1500);
-        } catch (err) {
-            if (err instanceof LoginError) {
-                setError(err.message);
-            } else {
-                setError("An unexpected error occured, please try again later.");
+        } catch (err){
+                if (err instanceof LoginError && err.code !== LoginErrorCode.UNKNOWN_ERROR) {
+                    setError(err.message);
+                } else {
+                    setError("An unexpected error occured, please try again later.");
+                }
             }
         }
-    }
 
     return (
-        <ModalBase modalName={modalName}>
+        <ModalBase modalName={modalName} handleClose={handleClose}>
             <div className={`bg-background ${styles.container}`}>
                 <div className={`bg-tertiary ${styles.left}`}>
                     <h1 className={`font-primary`}>Login to ApptSmart!</h1>
@@ -59,7 +69,7 @@ const LoginModal = () => {
                 </div>
                 <div className={`bg-background ${styles.right}`}>
                     <p className={`cursor-pointer text-primary ${styles.closeButton}`}
-                        onClick={() => closeModal(modalName)}
+                        onClick={() => handleClose(modalName)}
                     >
                         &times;
                     </p>
@@ -89,7 +99,7 @@ const LoginModal = () => {
                         <p>Need an account?</p>
                         <p
                             className={`text-secondary cursor-pointer`}
-                            onClick={()=>{closeModal(modalName);openModal("register")}}
+                            onClick={()=>{handleClose(modalName);openModal("register")}}
                             >
                                 Register
                             </p>

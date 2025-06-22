@@ -12,5 +12,6 @@ namespace ApptSmartBackend.Models
         }
 
         public DbSet<AuthUser> AuthUsers { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }

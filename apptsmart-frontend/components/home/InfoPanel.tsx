@@ -64,7 +64,7 @@ const InfoPanel = () => {
             <div className={`bg-secondary ${styles.container}`}>
                 <div className={`container`}>
                     <p className={`text-background ${styles.containerTitle}`}>
-                        See What We've Got for
+                        See What We&apos;ve Got for
                         <span className={`text-tertiary font-secondary`}> You</span>
                     </p>
                     <div className={styles.grid}>

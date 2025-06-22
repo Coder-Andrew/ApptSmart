@@ -1,11 +1,11 @@
 "use client";
 import ErrorableFormField from "@/components/UI/ErrorableFormField";
 import { fetchBackend, slugify } from "@/utilities/helpers";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 
-const companyRegistration = () => {
+const CompanyRegistration = () => {
     const [ companyName, setCompanyName ] = useState("");
     const [ companyNameError, setCompanyNameError ] = useState("");
     const [ companyDescription, setCompanyDescription ] = useState("");
@@ -84,7 +84,7 @@ const companyRegistration = () => {
             <div className={styles.inputBox}>
                 <div className={styles.formHeaders}>
                     <h2>Company Registration</h2>
-                    <h3>Get booking with AppSmart's professional scheduling solutions!</h3>
+                    <h3>Get booking with AppSmart&apos;s professional scheduling solutions!</h3>
                 </div>
                 <div className={styles.formFields}>
                     <form onSubmit={handleSubmit}>
@@ -122,4 +122,4 @@ const companyRegistration = () => {
     );
 }
  
-export default companyRegistration;
+export default CompanyRegistration;

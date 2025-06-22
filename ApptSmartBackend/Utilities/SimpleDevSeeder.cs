@@ -69,26 +69,26 @@ namespace ApptSmartBackend.Utilities
                 new Appointment
                 {
                     Company = adminCompany,
-                    StartTime = DateTime.Now.AddDays(5),
-                    EndTime = DateTime.Now.AddDays(5).AddMinutes(30)
+                    StartTime = DateTime.UtcNow.AddDays(5),
+                    EndTime = DateTime.UtcNow.AddDays(5).AddMinutes(30)
                 },
                 new Appointment
                 {
                     Company = adminCompany,
-                    StartTime = DateTime.Now.AddDays(5).AddHours(1),
-                    EndTime = DateTime.Now.AddDays(5).AddHours(1).AddMinutes(30)
+                    StartTime = DateTime.UtcNow.AddDays(5).AddHours(1),
+                    EndTime = DateTime.UtcNow.AddDays(5).AddHours(1).AddMinutes(30)
                 },
                 new Appointment
                 {
                     Company = adminCompany,
-                    StartTime = DateTime.Now.AddDays(6),
-                    EndTime = DateTime.Now.AddDays(6).AddMinutes(75)
+                    StartTime = DateTime.UtcNow.AddDays(6),
+                    EndTime = DateTime.UtcNow.AddDays(6).AddMinutes(75)
                 },
                 new Appointment
                 {
                     Company = adminCompany,
-                    StartTime = DateTime.Now.AddDays(7),
-                    EndTime = DateTime.Now.AddDays(7).AddHours(1)
+                    StartTime = DateTime.UtcNow.AddDays(7),
+                    EndTime = DateTime.UtcNow.AddDays(7).AddHours(1)
                 }
             };
 

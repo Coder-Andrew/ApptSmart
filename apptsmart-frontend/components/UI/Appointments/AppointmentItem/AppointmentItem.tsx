@@ -1,7 +1,7 @@
 "use client"
-import { Appointment, UserAppointmentProps } from "@/lib/types";
+import { UserAppointmentProps } from "@/lib/types";
 
-const AppointmentItem = ({appointment, bookedAt, companyName}: UserAppointmentProps) => {
+const AppointmentItem = ({appointment, companyName}: UserAppointmentProps) => {
     const startTimeDate = new Date(appointment.startTime);
     const endTimeDate = new Date(appointment.endTime);
     //console.log(startTime, endTime);

@@ -27,7 +27,7 @@ namespace ApptSmartBackend.DAL.Concrete
             return _userAppointments
                 .Include(a => a.Appointment)
                     .ThenInclude(a => a.Company)
-                .Where(ua => ua.UserInfoId == userId && ua.Appointment.StartTime >= DateTime.Now);
+                .Where(ua => ua.UserInfoId == userId && ua.Appointment.StartTime >= DateTime.UtcNow);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace ApptSmartBackend.DAL.Concrete
             return _userAppointments
                 .Include(a => a.Appointment)
                     .ThenInclude(a => a.Company)
-                .Where(ua => ua.UserInfoId == userId && ua.Appointment.StartTime < DateTime.Now);
+                .Where(ua => ua.UserInfoId == userId && ua.Appointment.StartTime < DateTime.UtcNow);
         }
     }
 }

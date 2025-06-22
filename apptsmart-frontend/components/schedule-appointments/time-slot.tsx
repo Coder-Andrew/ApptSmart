@@ -1,4 +1,3 @@
-import { Appointment } from "@/lib/types"
 import "./time-slot.css"
 
 interface TimeSlotProps {

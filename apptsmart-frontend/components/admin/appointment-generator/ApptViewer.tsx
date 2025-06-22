@@ -1,3 +1,4 @@
+import { AdminAppointment, AppointmentMap } from '@/lib/types';
 import styles from './ApptViewer.module.css';
 import { FaRegTrashAlt } from "react-icons/fa";
 

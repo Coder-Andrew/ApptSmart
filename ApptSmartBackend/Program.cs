@@ -28,8 +28,10 @@ using ApptSmartBackend.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddUserSecrets<Program>();
-
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddUserSecrets<Program>();
+}
 
 // Get connection strings/secrets
 string authConnectionString = builder.Configuration.GetConnectionString("AuthConnection") ?? throw new KeyNotFoundException("Cannot find Auth Connection string");
@@ -130,6 +132,7 @@ builder.Services.AddScoped<IUserHelperService, UserHelperService>();
 builder.Services.AddScoped<IUserInfoRepositoryAsync, UserInfoRepositoryAsync>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICompanyOwnerService, CompanyOwnerService>();
 builder.Services.AddScoped<IUserAppointmentService, UserAppointmentService>();
@@ -161,7 +164,6 @@ if (app.Environment.IsDevelopment())
 }
 
 
-
 //app.UseHttpsRedirection();
 app.UseCors(corsPolicyName);
 app.UseRouting();
@@ -172,5 +174,6 @@ app.UseAuthorization();
 app.UseCompanyValidation();
 
 app.MapControllers();
+
 
 app.Run();
