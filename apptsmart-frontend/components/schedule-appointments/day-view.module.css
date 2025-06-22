@@ -1,0 +1,54 @@
+.dayView {
+    background-color: var(--background);
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dayTitle {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .timeSlotsGrid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-rows: minmax(60px, auto);
+    grid-template-rows: repeat(8, 1fr);
+    /* grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); */
+    gap: 1rem;
+  }
+
+  .bookButton {
+    display: flex;
+    justify-content: center;
+  }
+
+  .bookButton button {
+    width: 50%;
+    margin-top: 1rem;
+    padding: 10px 0;
+  }
+/* LEFT OFF TRYING TO GET TIMES TO BE VERTICALLY SORTED WHILE ALSO BEING ABLE TO CONTROL NUM OF COLUMNS   */
+  @media (max-width: 640px) {
+    .timeSlotsGrid {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  
+  /* @media (min-width: 768px) {
+    .time-slots-grid {
+      grid-template-rows: repeat(3, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .time-slots-grid {
+      grid-template-rows: repeat(3, 1fr);
+    }
+  } */
+  

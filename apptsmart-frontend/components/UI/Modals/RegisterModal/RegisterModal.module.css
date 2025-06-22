@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+@keyframes slideUp {
+   from { transform: translateY(100vh); } 
+   to { transform: translateY(0); }
+}
+
+/* Modal Container */
+.modalContainer {
+    display: flex;
+    width: 800px;
+    background-color: var(--background-color);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.6s ease-out forwards
+}
+
+/* Left side of modal */
+.modalLeft {
+    /* background-color: #f0f0f0; */
+    padding: 40px;
+    width: 40%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendarIconSmall {
+    margin-bottom: 20px;
+}
+
+.modalTitle {
+    font-size: 28px;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.modalSubTitle {
+    color: #666;
+    margin-top: auto;
+    margin-bottom: 20px;
+}
+
+.calendarIconLarge {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.calendarIconCircle {
+    background-color: #d3d3d3;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+}
+
+/* Right side of modal */
+.modalRight {
+    padding: 40px;
+    width: 60%;
+    position: relative;
+}
+
+.closeButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.formTitle {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.formSubTitle {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.signupForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.formGroup label {
+    color: #666;
+    font-size: 12px;
+}
+
+.formGroup input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.signupButton {
+    padding: 14px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+
+.loginLink {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    color: #666;
+}
+
+.loginLink p {
+    cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .modalContainer {
+        flex-direction: column;
+        width: 95%;
+        max-width: 400px;
+    }
+
+    .formTitle, .formSubTitle {
+        text-align: center;
+    }
+
+    .modalLeft, .modalRight {
+        width: 100%;
+        padding: 30px;
+    }
+
+    .modalLeft {
+        padding-bottom: 20px;
+        text-align: center;
+    }
+
+    .modalRight {
+        padding-top: 20px;
+    }
+}

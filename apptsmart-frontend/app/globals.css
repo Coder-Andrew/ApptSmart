@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Radley:ital@0;1&family=Tangerine:wght@400;700&display=swap');
+
+/* Site variables */
+:root {
+    --primary-color: #111;
+    --secondary-color: #4949e9;
+    --tertiary-color: #dcf343;
+    --quartary-color: #808080;
+    --background-color: white;
+    --secondary-background-color: #e6e6e6;
+    --error-color: red;
+    --success-color: green;
+
+    --footer-color: #1a1a1a;
+    --footer-text-color: #ccc;
+    
+    --primary-font: 'Inter', sans-serif;
+    --secondary-font: "Radley", serif;
+    --tertiary-font: "Tangerine", cursive;
+
+    --container-width: 80%;
+    --media-width-cutoff: 750px;
+}
+
+/* General Rules */
+body {
+    font-family: var(--primary-font);
+    color: var(--primary-color);
+    font-style: normal;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+}
+
+.line-break {
+    display: block;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.footer-spacer {
+    height: 100vh;
+}
+
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+/* Font Styles */
+.font-primary {
+    font-family: var(--primary-font);
+    font-style: normal;
+}
+
+.font-secondary {
+    font-family: var(--secondary-font);
+    font-weight: 400;
+    font-style: italic;
+}
+
+.font-logo {
+    font-family: var(--tertiary-font);
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+/* Text colors */
+.text-primary {
+    color: var(--primary-color);
+}
+
+.text-secondary {
+    color: var(--secondary-color);
+}
+
+.text-tertiary {
+    color: var(--tertiary-color)
+}
+
+.text-warning {
+    color: var(--tertiary-color);
+}
+
+.text-error {
+    color: var(--error-color);
+}
+
+.text-success {
+    color: var(--success-color);
+}
+
+.text-muted {
+    color: var(--quartary-color);
+}
+
+.text-background {
+    color: var(--background-color);
+}
+
+.text-footer {
+    color: var(--footer-text-color);
+}
+
+/* Fill colors */
+.fill-secondary {
+    fill: var(--secondary-color);
+}
+
+.fill-tertiary {
+    fill: var(--tertiary-color);
+}
+
+/* Background colors */
+.bg-primary {
+    background-color: var(--primary-color);
+}
+
+.bg-secondary {
+    background-color: var(--secondary-color);
+}
+
+.bg-tertiary {
+    background-color: var(--tertiary-color);
+}
+
+.bg-footer {
+    background-color: var(--footer-color);
+}
+
+.bg-background {
+    background-color: var(--background-color);
+}
+
+.bg-secondary-background {
+    background-color: var(--secondary-background-color);
+}
+
+.bg-muted {
+    background-color: var(--quartary-color);
+}
+
+/* Button styles */
+.button-primary {
+    background-color: var(--secondary-color);
+    border-radius: 100px;
+    border: none;
+    color: var(--background-color);
+}
+
+.button-secondary {
+    background-color: var(--background-color);
+    border-radius: 100px;
+    border: 1px solid var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.button-tertiary {
+    background-color: var(--tertiary-color);
+    border-radius: 100px;
+    border: none;
+    color: var(--secondary-color)
+}
+
+.button-ghost {
+    background-color: var(--background-color);
+    border-radius: 100px;
+    border: none;
+    color: var(--secondary-color);
+}
+
+/* Cursor types */
+.cursor-pointer {
+    cursor: pointer;
+}
+.cursor-text {
+    cursor: text;
+}
