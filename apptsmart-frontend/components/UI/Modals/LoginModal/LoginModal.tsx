@@ -5,9 +5,9 @@ import styles from "./LoginModal.module.css";
 import { FormEvent, useEffect, useState } from "react";
 import ErrorableFormField from "../../ErrorableFormField";
 import { useUser } from "@/stores/UserContext";
-import { LoginError } from "@/utilities/loginError";
 import { Calendar } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { LoginError, LoginErrorCode } from "@/utilities/loginError";
 
 const LoginModal = () => {
     const { isModalOpen, closeModal, openModal } = useModal();
@@ -49,14 +49,14 @@ const LoginModal = () => {
                     setRedirectPath(null);
                 }
             },1500);
-        } catch (err) {
-            if (err instanceof LoginError) {
-                setError(err.message);
-            } else {
-                setError("An unexpected error occured, please try again later.");
+        } catch (err){
+                if (err instanceof LoginError && err.code !== LoginErrorCode.UNKNOWN_ERROR) {
+                    setError(err.message);
+                } else {
+                    setError("An unexpected error occured, please try again later.");
+                }
             }
         }
-    }
 
     return (
         <ModalBase modalName={modalName} handleClose={handleClose}>

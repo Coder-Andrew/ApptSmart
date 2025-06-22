@@ -1,4 +1,6 @@
-import { Appointment, CompanyInformation, RawAppointment } from "@/lib/types"
+import { Appointment, RawAppointment } from "@/lib/types"
+
+export const dynamic = "force-dynamic";
 
 export function toAppointment({id, startTime, endTime}: RawAppointment): Appointment {
     const start = new Date(startTime);
@@ -35,9 +37,10 @@ export function getCsrftoken(): string {
 
 // A wrapper for the standard fetch request which routes requests through the api
 export function fetchBackend(input: string, init?: RequestInit): Promise<Response> {
-    
+    console.log(input);
     const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""; // For modifying base path later, for portfolio site
     const url = `${basePath}/api/backend${input.startsWith('/') ? input : `/${input}`}`;
+    console.log(url);
 
     const method = init?.method?.toLowerCase();
     const csrfRequired = method && ["post", "put", "patch", "delete"].includes(method);
