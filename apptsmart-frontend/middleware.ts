@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
+import ROUTES from "./lib/routes";
 
 export function middleware(req: NextRequest) {
     const token = req.cookies.get("AuthToken")?.value;
@@ -13,7 +14,7 @@ export function middleware(req: NextRequest) {
         protectedEndpoints.some(r => req.nextUrl.pathname.endsWith(r))
     )) {
         res.headers.set('x-require-auth', 'true');
-        const redirectUrl = new URL('/', req.url);
+        const redirectUrl = new URL(ROUTES.home, req.url);
         redirectUrl.searchParams.set('redirect', req.nextUrl.pathname);
         return NextResponse.redirect(redirectUrl);
     }

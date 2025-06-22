@@ -1,6 +1,6 @@
 const placeholder = '/coming-soon';
 const ROUTES = {
-    'home': '/',
+    'home': process.env.NEXT_PUBLIC_BASE_PATH ? `${process.env.NEXT_PUBLIC_BASE_PATH}/` :'/',
     'appointments': '/appointments',
     'companyRegistration': '/register-company',
     'features': '/features',
