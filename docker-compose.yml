@@ -1,0 +1,30 @@
+services:
+  ApptSmart-Frontend:
+    image: my-frontend:latest
+    build:
+      context: ./apptsmart-frontend
+      dockerfile: Dockerfile
+    environment:
+      - BACKEND_URL=http://ApptSmart-Backend:8080
+      - NEXT_PUBLIC_BASE_PATH=/app1
+    networks:
+      - app_network
+  ApptSmart-Backend:
+    image: my-backend:latest
+    build:
+      context: ./ApptSmartBackend
+      dockerfile: Dockerfile
+    environment:
+      - ConnectionStrings__AuthConnection=Server=my-database;Database=ApptSmartAuth;User=sa;Password=${MSSQL_SA_PASSWORD};MultipleActiveResultSets=true;TrustServerCertificate=True
+      - ConnectionStrings__AppConnection=Server=my-database;Database=ApptSmart;User=sa;Password=${MSSQL_SA_PASSWORD};MultipleActiveResultSets=true;TrustServerCertificate=True
+      - Cors__AllowedSites__0=http://ApptSmart-Frontend:5100
+      - SeedUserPassword=${SEED_USER_PASSWORD}
+      - Jwt__Secret=${JWT_SECRET}
+      - Jwt__ExpiryMinutes=15
+    networks:
+      - app_network
+
+
+networks:
+  app_network:
+    external: true
