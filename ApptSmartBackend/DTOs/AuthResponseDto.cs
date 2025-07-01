@@ -6,6 +6,6 @@ namespace ApptSmartBackend.DTOs
     {
         public string Jwt { get; set; } = string.Empty;
         public string CsrfToken { get; set; } = string.Empty;
-        public string RefreshToken { get; set; } = string.Empty;
+        public RefreshToken RefreshToken { get; set; } = new();
     }
 }

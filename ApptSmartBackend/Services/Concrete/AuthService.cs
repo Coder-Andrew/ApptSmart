@@ -110,7 +110,7 @@ namespace ApptSmartBackend.Services.Concrete
                 {
                     Jwt = jwt,
                     CsrfToken = _jwtHelper.GenerateUrlSafeToken(),
-                    RefreshToken = refreshToken.Token,
+                    RefreshToken = refreshToken,
                 },
                 success: true,
                 message: "Login successful",

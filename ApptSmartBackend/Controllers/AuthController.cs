@@ -115,6 +115,7 @@ namespace ApptSmartBackend.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto userInfo)
         {
+            // ERROR HERE, TOKEN IS NULL
             GenericResponse<AuthResponseDto> response = await _authService.Login(userInfo);
 
             if (!response.Success)
@@ -128,11 +129,13 @@ namespace ApptSmartBackend.Controllers
                 }
             }
 
-            // TODO: Either move the RefreshToken into AuthResponseDto, or figure out a better way of passing the token's values
-            // TODO: The line below adds an unecessary db lookup
-            var token = await _refreshTokenService.GetValidRefreshTokenAsync(response.Data!.RefreshToken);
+            if (response.Data!.RefreshToken == null)
+            {
+                _logger.LogError("Login succeeded but refresh token is null");
+                return StatusCode(500, ErrorMessages.Generic);
+            }
 
-            SetAuthCookies(response.Data!.Jwt, response.Data.CsrfToken, token!);
+            SetAuthCookies(response.Data!.Jwt, response.Data.CsrfToken, response.Data.RefreshToken);
 
             // Change later for third-party consumers
             return Ok(response.Message);
