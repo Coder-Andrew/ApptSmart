@@ -5,6 +5,7 @@ const ROUTES = {
     'companyRegistration': '/register-company',
     'features': '/features',
     'about': '/about',
+    'apptsmartSchedule': '/c/apptsmart/schedule',
     
     // TODO: Add these pages
     'contactUs': placeholder,
