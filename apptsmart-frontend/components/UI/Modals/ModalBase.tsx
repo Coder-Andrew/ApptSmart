@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./ModalBase.module.css";
 import { ModalType, useModal } from "@/providers/ModalProvider";
 
@@ -9,12 +9,27 @@ type ModalBaseProps = {
 }
 
 const ModalBase: React.FC<ModalBaseProps> = ({ children, modalName,  handleClose}) => {
-    const { closeModal } = useModal();
+    const { closeModal, isModalOpen } = useModal();
+    const open = isModalOpen(modalName);
+
     if (typeof handleClose === "undefined") {
         handleClose = closeModal;
     }
 
-    /// LEFT OFF TRYING TO MAKE SURE CLOSE MODAL CAN EITHER BE PASSED IN OR DEFAULTS TO ORIGINAL CLOSE MODAL
+    useEffect(() => {
+        if (open) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "";
+        }
+
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [open]);
+
+
+    if (!open) return null;
 
     return (
         <div className={styles.modalOverlay} onClick={() => handleClose(modalName)}>
