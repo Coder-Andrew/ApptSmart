@@ -139,12 +139,10 @@
     .modalContainer {
         flex-direction: column;
         width: 90%;
-        /* max-width: 400px; */
-        max-height: 90vh;
+        max-height: 85vh;
         overflow: scroll;
-        justify-self: center;
-
-        -ms-text-overflow: none;
+        margin: 0 auto;
+        text-overflow: none;
         scrollbar-width: none;
     }
 
