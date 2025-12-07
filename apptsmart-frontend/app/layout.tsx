@@ -6,6 +6,7 @@ import RegisterModal from "@/components/UI/Modals/RegisterModal/RegisterModal";
 import { ModalProvider } from "@/providers/ModalProvider";
 import Footer from "@/components/UI/Footer/Footer";
 import LoginModal from "@/components/UI/Modals/LoginModal/LoginModal";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "ApptSmart",
@@ -19,17 +20,19 @@ export default function RootLayout({
 }>) {
   return (
     <UserProvider>
-      <ModalProvider> 
-        <Navbar />
-        <RegisterModal />
-        <LoginModal />
-        <html lang="en">
-            <body>
-              {children}
-            </body>
-        </html>
-        <Footer />
-      </ModalProvider>
+      <Suspense fallback={null}>
+        <ModalProvider> 
+          <Navbar />
+          <RegisterModal />
+          <LoginModal />
+          <html lang="en">
+              <body>
+                {children}
+              </body>
+          </html>
+          <Footer />
+        </ModalProvider>
+      </Suspense>
     </UserProvider>
   );
 }

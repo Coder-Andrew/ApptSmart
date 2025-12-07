@@ -2,6 +2,8 @@ import styles from '@/components/home/welcomebanner.module.css'
 import Link from 'next/link';
 import Image from "next/image"
 import { IoIosStar } from "react-icons/io";
+import ROUTES from '@/lib/routes';
+import satisfiedUser from '@/public/Home/ActiveUsers.png';
 
 
 const WelcomeBanner = () => {
@@ -21,7 +23,7 @@ const WelcomeBanner = () => {
               <span>effortlessly connecting you with the services you need.</span>
             </p>
             <div className={styles.buttonGroup}>
-              <Link href={'/schedule'} className={`button-primary`}>View Schedule</Link>
+              <Link href={ROUTES.apptsmartSchedule} className={`button-primary`}>View Schedule</Link>
               <Link href={'/contact-us'} className={`button-secondary`}>Learn More &rarr;</Link>
             </div>
           </div>
@@ -46,7 +48,7 @@ const WelcomeBanner = () => {
               <div className={`text-muted ${styles.bottom}`}>Satisfied Users</div>
             </div>
             <Image
-              src="/Home/ActiveUsers.png"
+              src={satisfiedUser}
               height={674} //{674}
               width={762} //{762}
               alt="Satisfied user"

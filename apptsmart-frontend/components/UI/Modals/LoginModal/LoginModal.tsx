@@ -64,45 +64,43 @@ const LoginModal = () => {
                 <div className={`bg-tertiary ${styles.left}`}>
                     <h1 className={`font-primary`}>Login to ApptSmart!</h1>
                     <div className={styles.calendarIconSmall}>
+                        <p>You&apos;re one step away from effortless scheduling!</p>
                         <Calendar />
                     </div>
                 </div>
                 <div className={`bg-background ${styles.right}`}>
-                    <p className={`cursor-pointer text-primary ${styles.closeButton}`}
-                        onClick={() => handleClose(modalName)}
-                    >
-                        &times;
-                    </p>
-                    <p className={`text-error ${error ? "visible" : "invisible"} ${styles.loginError}`}>{ error || "\u00a0" }</p>
-                    <form onSubmit={(e) => {loginUser(e)}}>
-                        <ErrorableFormField 
-                            id="email"
-                            label="Email"
-                            value={email}
-                            placeholder="Your email"
-                            onChange={(e)=> setEmail(e.target.value)}
-                            classNameWrapper={styles.inputWrapper}                        
-                        />
-                        <ErrorableFormField 
-                            id="password"
-                            label="Password"
-                            type="password"
-                            value={password}
-                            placeholder="Password"
-                            onChange={(e)=> setPassword(e.target.value)}
-                            classNameWrapper={styles.inputWrapper}
-                        />
-                        <button type="submit" className={`button-primary cursor-pointer`}>Submit</button>
-                        <p className={`text-success ${success ? "visible" : "invisible"}`}>Login successful!</p>
-                    </form>
-                    <div className={styles.promptRegister}>
-                        <p>Need an account?</p>
-                        <p
-                            className={`text-secondary cursor-pointer`}
-                            onClick={()=>{handleClose(modalName);openModal("register")}}
-                            >
-                                Register
-                            </p>
+                    <div className={styles.rightContent}>
+                        <p className={`cursor-pointer text-primary ${styles.closeButton}`}
+                            onClick={() => handleClose(modalName)}
+                        >&times;</p>
+                        <p className={`text-error ${error ? "visible" : "invisible"} ${styles.loginError}`}>{ error || "\u00a0" }</p>
+                        <form onSubmit={(e) => {loginUser(e)}}>
+                            <ErrorableFormField 
+                                id="email"
+                                label="Email"
+                                value={email}
+                                placeholder="Your email"
+                                onChange={(e)=> setEmail(e.target.value)}
+                                classNameWrapper={styles.formField}                        
+                            />
+                            <ErrorableFormField 
+                                id="password"
+                                label="Password"
+                                type="password"
+                                value={password}
+                                placeholder="Password"
+                                onChange={(e)=> setPassword(e.target.value)}
+                                classNameWrapper={styles.formField}
+                            />
+                            <button type="submit" className={`button-primary cursor-pointer`}>Submit</button>
+                            <p className={`text-success ${success ? "visible" : "invisible"}`}>Login successful!</p>
+                        </form>
+                        <div className={styles.register}>
+                            <p>Need an account?</p>
+                            <p
+                                className={`text-secondary cursor-pointer`}
+                                onClick={()=>{handleClose(modalName);openModal("register")}}>Register</p>
+                        </div>
                     </div>
                 </div>
             </div>
