@@ -30,7 +30,6 @@
 
 .collapsible {
     display: flex;
-    gap: 30px;
     align-items: center;
 }
 
@@ -58,23 +57,56 @@
 }
 
 @media (max-width: 768px) {
+    /* General responsiveness of the navbar */
     .navbar, .navLinkGroup, .navUserGroup {
         flex-direction: column;
     }
+
     .navbar {
-        background-color: color-mix(in srgb, var(--tertiary-color) 50%, transparent);
-        gap: 20px;
-        padding: 20px 0;        
-        /* width: 60%; */
-        border-bottom-left-radius: 30px;
-        border-bottom-right-radius: 30px;
+        border: 1px solid var(--footer-text-color);
+        text-align: center;
+        padding: 1rem 1.5rem;
+        margin-top: 1rem;
+        border-radius: 1rem;
+        transition: gap 0.4s ease-in;     
     }
 
     .collapsible {
-        margin-bottom: 10px;
+        width: 100%;
+        justify-content: space-between;
     }
 
+    /* hamburger and close navbar buttons */
     .hamBurger {
-        display: inline;
+        display: block;
+        font-size: 1.5rem;
+    }
+
+    .closeNav {
+        font-size: 2rem;
+        line-height: 1;
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Set up hidden and visible states using max-height */
+    .navDropDown {
+        overflow: hidden;
+        transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out, margin-top 0.4s ease-in-out;
+        max-height: 0;
+        opacity: 0;
+    }
+
+    .navDropDown.open {
+        max-height: 100vh;
+        opacity: 1;
+        margin-top: 2rem;
+    }
+
+    .navDropDown.closed {
+        max-height: 0;
+        opacity: 0;
+        margin-top: 0;
     }
 }

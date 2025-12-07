@@ -138,8 +138,16 @@
 @media (max-width: 768px) {
     .modalContainer {
         flex-direction: column;
-        width: 95%;
-        max-width: 400px;
+        width: 90%;
+        max-height: 85vh;
+        overflow: scroll;
+        margin: 0 auto;
+        text-overflow: none;
+        scrollbar-width: none;
+    }
+
+    .modalContainer::-webkit-scrollbar {
+        display: none;
     }
 
     .formTitle, .formSubTitle {
